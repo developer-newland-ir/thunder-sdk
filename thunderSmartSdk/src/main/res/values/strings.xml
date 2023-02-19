@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">Smart Light</string>
+    <string name="thuner_light">Smart Light</string>
+    <string name="description">Smart Light</string>
+    <string name="invalid_amount">مبلغ صحیح وارد نمایید.</string>
+
+
+</resources>

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+
+    <!--
+    Define Permission
+    https://developer.android.com/guide/topics/permissions/defining
+    https://stackoverflow.com/questions/8816623/how-to-use-custom-permissions-in-android
+    -->
+
+    <uses-permission android:name="com.thunderlight.sadad.permission.THUNDER_LIGHT" />
+
+
+    <application>
+        <receiver
+            android:name=".sadad.SDKManager$SdkBroadcastReceiver"
+            android:enabled="true"
+            android:exported="true"
+            android:permission="com.thunderlight.sadad.permission.THUNDER_LIGHT">
+            <intent-filter>
+                <action android:name="com.thunderlight.sadad.SEND_TXN_DATA" />
+            </intent-filter>
+        </receiver>
+
+
+    </application>
+
+</manifest>
