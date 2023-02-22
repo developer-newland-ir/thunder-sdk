@@ -32,7 +32,7 @@ class ResultActivity : AppCompatActivity() {
             }
 
             if (it.hasExtra(ConstantsStr.POS_DATA)) {
-                posData = it.getSerializableExtra(ConstantsStr.POS_DATA) as PosData
+                posData = it.getParcelableExtra(ConstantsStr.POS_DATA)!!
                 loadPosData(posData)
             }
         }
