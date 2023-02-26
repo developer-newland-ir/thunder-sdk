@@ -10,8 +10,10 @@ import android.os.Bundle
 import android.util.Log
 import com.thunderlight.thundersmartsdk.R
 import com.thunderlight.thundersmartsdk.constant.ConstantsStr
+import com.thunderlight.thundersmartsdk.constant.ConstantsStr.ADDRESS_FA
 import com.thunderlight.thundersmartsdk.constant.ConstantsStr.AFFECTIVE_AMOUNT
 import com.thunderlight.thundersmartsdk.constant.ConstantsStr.AMOUNT
+import com.thunderlight.thundersmartsdk.constant.ConstantsStr.APP_VERSION
 import com.thunderlight.thundersmartsdk.constant.ConstantsStr.BANK
 import com.thunderlight.thundersmartsdk.constant.ConstantsStr.BILL_ID
 import com.thunderlight.thundersmartsdk.constant.ConstantsStr.BILL_PAYMENT_ID
@@ -27,7 +29,11 @@ import com.thunderlight.thundersmartsdk.constant.ConstantsStr.HASH_PAN
 import com.thunderlight.thundersmartsdk.constant.ConstantsStr.MERCHANT_ID
 import com.thunderlight.thundersmartsdk.constant.ConstantsStr.MERCHANT_NAME
 import com.thunderlight.thundersmartsdk.constant.ConstantsStr.MOBILE_NUMBER
+import com.thunderlight.thundersmartsdk.constant.ConstantsStr.POS_BRAND_NUMBER
+import com.thunderlight.thundersmartsdk.constant.ConstantsStr.POS_CODE
 import com.thunderlight.thundersmartsdk.constant.ConstantsStr.POS_DATA
+import com.thunderlight.thundersmartsdk.constant.ConstantsStr.POS_MODEL
+import com.thunderlight.thundersmartsdk.constant.ConstantsStr.POS_PART_NUMBER
 import com.thunderlight.thundersmartsdk.constant.ConstantsStr.POS_SERIAL
 import com.thunderlight.thundersmartsdk.constant.ConstantsStr.RECEIVE_STATE
 import com.thunderlight.thundersmartsdk.constant.ConstantsStr.RECEIVE_STATE_CANCEL
@@ -38,10 +44,12 @@ import com.thunderlight.thundersmartsdk.constant.ConstantsStr.RESERVE_NUMBER
 import com.thunderlight.thundersmartsdk.constant.ConstantsStr.RESPONSE_CODE
 import com.thunderlight.thundersmartsdk.constant.ConstantsStr.RESPONSE_MESSAGE
 import com.thunderlight.thundersmartsdk.constant.ConstantsStr.RRN
+import com.thunderlight.thundersmartsdk.constant.ConstantsStr.SDK_VERSION
 import com.thunderlight.thundersmartsdk.constant.ConstantsStr.SHIFT_NO
+import com.thunderlight.thundersmartsdk.constant.ConstantsStr.SOLAR_DATE
+import com.thunderlight.thundersmartsdk.constant.ConstantsStr.TELEPHONE
 import com.thunderlight.thundersmartsdk.constant.ConstantsStr.TERMINAL_ID
 import com.thunderlight.thundersmartsdk.constant.ConstantsStr.TIME
-import com.thunderlight.thundersmartsdk.constant.ConstantsStr.SOLAR_DATE
 import com.thunderlight.thundersmartsdk.constant.ConstantsStr.TIME_STAMP
 import com.thunderlight.thundersmartsdk.constant.ConstantsStr.TRACE
 import com.thunderlight.thundersmartsdk.constant.ConstantsStr.TRUNCATE_PAN
@@ -50,7 +58,7 @@ import com.thunderlight.thundersmartsdk.constant.RequestType
 import com.thunderlight.thundersmartsdk.constant.TxnInquiryType
 import com.thunderlight.thundersmartsdk.data.PosData
 import com.thunderlight.thundersmartsdk.data.TransactionData
-
+import java.io.ByteArrayOutputStream
 
 /**
  * @author Created by M.Moradikia
@@ -64,17 +72,22 @@ class SDKManager {
     companion object {
         private var transactionCallBack: TransactionCallBack? = null
         private var posDataCallBack: PosDataCallBack? = null
-        private var keyChangeCallBack: KeyChangeCallBack? = null
+        private var resultCallBack: ResultCallBack? = null
         private val ca = Intent.CATEGORY_LAUNCHER //category
     }
 
-
     //چاپ رسید
-    fun printBitmap(context: Activity, bitmap: Bitmap?) {
+    fun printBitmap(context: Activity, bitmap: Bitmap?, resultCallBack: ResultCallBack) {
+        SDKManager.resultCallBack = resultCallBack
         val i = Intent(ca)
+        val bs = ByteArrayOutputStream()
+        bitmap?.compress(Bitmap.CompressFormat.WEBP, 100, bs)
+
+        Log.i(TAG, "printBitmap Size: ${bs.size()}")
         i.component = ComponentName(ConstantsStr.PNS, ConstantsStr.SA)
         i.putExtra(REQUEST_TYPE_3RD_PARTY, RequestType.REQUEST_TYPE_PRINT_BITMAP.value)
-        i.putExtra(ConstantsStr.BITMAP, bitmap)
+        i.putExtra(ConstantsStr.BITMAP, bs.toByteArray())
+
         context.startActivity(i)
     }
 
@@ -135,8 +148,8 @@ class SDKManager {
     }
 
     //انجام تراکنش تبادل کلید
-    fun doKeyChange(context: Activity, keyChangeCallBack: KeyChangeCallBack) {
-        SDKManager.keyChangeCallBack = keyChangeCallBack
+    fun doKeyChange(context: Activity, resultCallBack: ResultCallBack) {
+        SDKManager.resultCallBack = resultCallBack
         val i = Intent(ca)
         i.component = ComponentName(ConstantsStr.PNS, ConstantsStr.SA)
         i.putExtra(REQUEST_TYPE_3RD_PARTY, RequestType.REQUEST_TYPE_DO_KEY_CHANGE.value)
@@ -172,8 +185,9 @@ class SDKManager {
                             RequestType.REQUEST_TYPE_CHARGE_TOP_UP.value -> {
                                 handleTxnData(it, requestType)
                             }
+                            RequestType.REQUEST_TYPE_PRINT_BITMAP.value,
                             RequestType.REQUEST_TYPE_DO_KEY_CHANGE.value -> {
-                                keyChangeResponse(it)
+                                handleResult(it)
                             }
                             else -> {}
                         }
@@ -317,10 +331,63 @@ class SDKManager {
 
         private fun handlePosData(intent: Intent) {
             Log.i(TAG, "handle Pos Data: ")
-            val m = SDKManager()
             when (intent.getStringExtra(RECEIVE_STATE) ?: "") {
                 RECEIVE_STATE_SUCCESS -> {
-                    val posData: PosData = intent.getSerializableExtra(POS_DATA) as PosData
+                    val posData = PosData()
+                    intent.extras?.let {
+                        if (intent.hasExtra(TIME_STAMP))
+                            posData.timeStamp = it.getLong(TIME_STAMP)
+                        if (it.containsKey(DATE))
+                            posData.date = it.getString(DATE)!!
+
+                        if (it.containsKey(TIME))
+                            posData.time = it.getString(TIME)!!
+
+                        if (it.containsKey(TERMINAL_ID))
+                            posData.terminalId = it.getString(TERMINAL_ID)!!
+
+                        if (it.containsKey(MERCHANT_ID))
+                            posData.merchantId = it.getString(MERCHANT_ID)!!
+
+                        if (it.containsKey(MERCHANT_NAME))
+                            posData.merchantName = it.getString(MERCHANT_NAME)!!
+
+                        if (it.containsKey(POS_SERIAL))
+                            posData.posSerial = it.getString(POS_SERIAL)!!
+
+
+                        if (it.containsKey(POS_PART_NUMBER))
+                            posData.posPartNumber = it.getString(POS_PART_NUMBER)!!
+
+
+                        if (it.containsKey(POS_BRAND_NUMBER))
+                            posData.posBrandName = it.getString(POS_BRAND_NUMBER)!!
+
+                        if (it.containsKey(POS_MODEL))
+                            posData.posModel = it.getString(POS_MODEL)!!
+
+                        if (it.containsKey(POS_CODE))
+                            posData.posCode = it.getString(POS_CODE)!!
+
+                        if (it.containsKey(APP_VERSION))
+                            posData.appVersion = it.getString(APP_VERSION)!!
+
+                        if (it.containsKey(SDK_VERSION))
+                            posData.sdkVersion = it.getString(SDK_VERSION)!!
+
+                        if (it.containsKey(TELEPHONE))
+                            posData.telNo = it.getString(TELEPHONE)!!
+
+                        if (it.containsKey(MOBILE_NUMBER))
+                            posData.mobileNo = it.getString(MOBILE_NUMBER)!!
+
+                        if (it.containsKey(ADDRESS_FA))
+                            posData.addressFa = it.getString(ADDRESS_FA)!!
+
+                        if (it.containsKey(EXTRA_DATA))
+                            posData.extraData = null
+
+                    }
                     posDataCallBack?.onReceive(posData)
                 }
                 RECEIVE_STATE_ERROR -> {
@@ -332,17 +399,16 @@ class SDKManager {
             }
         }
 
-        private fun keyChangeResponse(intent: Intent) {
+        private fun handleResult(intent: Intent) {
             Log.i(TAG, "key Change Response: ")
-            val m = SDKManager()
             when (intent.getStringExtra(RECEIVE_STATE) ?: "") {
                 RECEIVE_STATE_SUCCESS -> {
-                    keyChangeCallBack?.onSuccess()
+                    resultCallBack?.onSuccess()
                 }
                 RECEIVE_STATE_ERROR -> {
                     val errorCode = intent.getStringExtra(ERROR_CODE) ?: ""
                     val errorMessage = intent.getStringExtra(ERROR_MESSAGE) ?: ""
-                    keyChangeCallBack?.onError(errorCode, errorMessage)
+                    resultCallBack?.onError(errorCode, errorMessage)
                 }
                 else -> {}
             }
