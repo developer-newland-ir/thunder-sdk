@@ -67,7 +67,7 @@ afterEvaluate {
 
                 groupId = 'com.github.developer-newland-ir'
                 artifactId = 'thunder-sdk'
-                version = '1.0'
+                version = '1.0-alpha'
             }
         }
     }
