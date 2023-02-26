@@ -6,7 +6,7 @@ package com.thunderlight.thundersmartsdk.sadad
  * @company Thunder-Light
  */
 
-interface KeyChangeCallBack {
+interface ResultCallBack {
     fun onSuccess()
     fun onError(errorCode: String, errorMsg: String)
 }

@@ -14,19 +14,19 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
-import com.enrique.stackblur.StackBlurManager
 import com.thunderlight.sdkDemo.constant.ConstantsStr
 import com.thunderlight.sdk.R
 import com.thunderlight.sdk.databinding.ActivityMainBinding
 import com.thunderlight.sdkDemo.ui.service.PaymentServicesAdapter
 import com.thunderlight.sdkDemo.ui.service.PaymentServicesViewModel
 import com.thunderlight.sdkDemo.ui.service.model.PaymentServiceItem
+import com.thunderlight.thundersmartsdk.constant.ConstantsStr.POS_DATA
 import com.thunderlight.thundersmartsdk.constant.ConstantsStr.TRANSACTION_DATA
 import com.thunderlight.thundersmartsdk.constant.RequestType
 import com.thunderlight.thundersmartsdk.constant.TxnInquiryType
 import com.thunderlight.thundersmartsdk.data.PosData
 import com.thunderlight.thundersmartsdk.data.TransactionData
-import com.thunderlight.thundersmartsdk.sadad.KeyChangeCallBack
+import com.thunderlight.thundersmartsdk.sadad.ResultCallBack
 import com.thunderlight.thundersmartsdk.sadad.PosDataCallBack
 import com.thunderlight.thundersmartsdk.sadad.SDKManager
 import com.thunderlight.thundersmartsdk.sadad.TransactionCallBack
@@ -44,7 +44,7 @@ open class MainActivity : AppCompatActivity() {
     private val size = 100
     private val mShadowBounds = RectF()
 
-    private var _stackBlurManager: StackBlurManager? = null
+   // private var _stackBlurManager: StackBlurManager? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -106,7 +106,7 @@ open class MainActivity : AppCompatActivity() {
 
                 val transactionCallBack = object : TransactionCallBack {
                     override fun onReceive(transactionData: TransactionData) {
-                        Log.i(TAG, "transactionCallBack onReceive: $transactionData")
+                        Log.i(TAG, "transactionCallBack onReceive: $transactionData")//call toString() of transactionData
                         val intent = Intent(this@MainActivity, ResultActivity::class.java)
                         intent.putExtra(TRANSACTION_DATA, transactionData)
                         startActivity(intent)
@@ -127,7 +127,7 @@ open class MainActivity : AppCompatActivity() {
                     override fun onReceive(posData: PosData) {
                         Log.i(TAG, "posDataCallBack onReceive: $posData")
                         val intent = Intent(this@MainActivity, ResultActivity::class.java)
-                        intent.putExtra(TRANSACTION_DATA, posData)
+                        intent.putExtra(POS_DATA, posData)
                         startActivity(intent)
                     }
 
@@ -137,10 +137,10 @@ open class MainActivity : AppCompatActivity() {
                     }
                 }
 
-                val keyChangeCallBack = object : KeyChangeCallBack {
+                val resultCallBack = object : ResultCallBack {
                     override fun onSuccess() {
                         Log.i(TAG, "keyChangeCallBack onSuccess ")
-                        Toast.makeText(this@MainActivity, "Key Change onSuccess", Toast.LENGTH_LONG).show()
+                        Toast.makeText(this@MainActivity, "--------- Result Success ---------", Toast.LENGTH_LONG).show()
                     }
 
                     override fun onError(errorCode: String, errorMsg: String) {
@@ -167,16 +167,20 @@ open class MainActivity : AppCompatActivity() {
                                 sdkManager.doServiceTransaction(this@MainActivity, RequestType.REQUEST_TYPE_CHARGE, false, transactionCallBack)
                             }
                             RequestType.REQUEST_TYPE_INQUIRY_TRANSACTION -> {
-                                //شناسه برای استعلام تراکنش
-                                val id = "123456879"
-                                // TxnInquiryType به صورت enum تعریف شده است، که براساس نیاز میتوانید مقدار آنرا تغییر دهید
-                                val inquiryType = TxnInquiryType.REQUEST_TYPE_INQUIRY_BY_TRACE
 
-                                sdkManager.inquiryTransactionData(this@MainActivity, inquiryType, id, true, transactionCallBack)
+                                //شناسه برای استعلام تراکنش
+                                val trace = "69"
+                                val rrn = "320138312569"
+                                val reserveNumber = "123465798"
+
+                                // TxnInquiryType به صورت enum تعریف شده است، که براساس نیاز میتوانید مقدار آنرا تغییر دهید
+                                val inquiryType = TxnInquiryType.REQUEST_TYPE_INQUIRY_BY_RRN
+
+                                sdkManager.inquiryTransactionData(this@MainActivity, inquiryType, rrn, true, transactionCallBack)
                             }
 
                             RequestType.REQUEST_TYPE_DO_KEY_CHANGE -> {
-                                sdkManager.doKeyChange(this@MainActivity, keyChangeCallBack)
+                                sdkManager.doKeyChange(this@MainActivity, resultCallBack)
                             }
 
                             RequestType.REQUEST_TYPE_INQUIRY_POS_DATA -> {
@@ -184,10 +188,12 @@ open class MainActivity : AppCompatActivity() {
                             }
 
                             RequestType.REQUEST_TYPE_PRINT_BITMAP -> {
-                                //Attention: width of bitmap must be 384 px
-                                sdkManager.printBitmap(this@MainActivity, null)
+                                // Attention: width of bitmap must be 384 px
+                                val options = BitmapFactory.Options()
+                                options.inScaled = false
+                                val bitmap = BitmapFactory.decodeResource(context.resources, R.drawable.img_384, options)
+                                sdkManager.printBitmap(this@MainActivity, bitmap, resultCallBack)
                             }
-
                             else -> {
                             }
                         }

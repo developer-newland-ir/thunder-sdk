@@ -117,6 +117,14 @@ object ConstantsStr {
     const val RECEIVE_STATE_CANCEL = "receive_state_cancel"
 
 
+    const val POS_PART_NUMBER = "pos_part_number"
+    const val POS_BRAND_NUMBER = "pos_brand_number"
+    const val POS_CODE = "pos_code"
+    const val APP_VERSION = "app_version"
+    const val SDK_VERSION = "sdk_version"
+    const val TELEPHONE = "telephone"
+    const val ADDRESS_FA = "address_fa"
+
     const val TXN_TYPE = "txn_type"
     const val RESPONSE_CODE = "responseCode"
     const val RESPONSE_MESSAGE = "responseMessage"
