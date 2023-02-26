@@ -1,0 +1,2 @@
+C:\Users\m.moradkia\AndroidStudioProjects\NewLandSDK\StackBlur\jni\Android.mk
+C:\Users\m.moradkia\AndroidStudioProjects\NewLandSDK\StackBlur\jni\Application.mk
