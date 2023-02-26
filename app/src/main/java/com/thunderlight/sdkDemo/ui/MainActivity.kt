@@ -14,9 +14,10 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
-import com.thunderlight.sdkDemo.constant.ConstantsStr
+import com.thunder.mylibrary.StringUtilsManager
 import com.thunderlight.sdk.R
 import com.thunderlight.sdk.databinding.ActivityMainBinding
+import com.thunderlight.sdkDemo.constant.ConstantsStr
 import com.thunderlight.sdkDemo.ui.service.PaymentServicesAdapter
 import com.thunderlight.sdkDemo.ui.service.PaymentServicesViewModel
 import com.thunderlight.sdkDemo.ui.service.model.PaymentServiceItem
@@ -26,8 +27,8 @@ import com.thunderlight.thundersmartsdk.constant.RequestType
 import com.thunderlight.thundersmartsdk.constant.TxnInquiryType
 import com.thunderlight.thundersmartsdk.data.PosData
 import com.thunderlight.thundersmartsdk.data.TransactionData
-import com.thunderlight.thundersmartsdk.sadad.ResultCallBack
 import com.thunderlight.thundersmartsdk.sadad.PosDataCallBack
+import com.thunderlight.thundersmartsdk.sadad.ResultCallBack
 import com.thunderlight.thundersmartsdk.sadad.SDKManager
 import com.thunderlight.thundersmartsdk.sadad.TransactionCallBack
 
@@ -44,7 +45,7 @@ open class MainActivity : AppCompatActivity() {
     private val size = 100
     private val mShadowBounds = RectF()
 
-   // private var _stackBlurManager: StackBlurManager? = null
+    // private var _stackBlurManager: StackBlurManager? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -89,6 +90,7 @@ open class MainActivity : AppCompatActivity() {
         //binding.imageView.setImageBitmap(_stackBlurManager!!.process(50))
         // binding.imageView.setImageBitmap(_stackBlurManager!!.processNatively(50))
         //binding.imageView.setImageBitmap(_stackBlurManager!!.processRenderScript(this,50f))
+
     }
 
     private fun initView() {

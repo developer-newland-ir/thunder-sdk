@@ -7,7 +7,7 @@ plugins {
 android {
     signingConfigs {
         Sadad {
-            storeFile file('F:\\AndroidStudioProjects\\NewlandPosApp\\ThunderLight_Sadad.jks')
+            storeFile file('..\\app\\ThunderLight_Sadad.jks')
             storePassword 'TLs@dad2022'
             keyPassword 'TLs@dad2022'
             keyAlias 'ThunderLight_Sadad'
@@ -25,14 +25,13 @@ android {
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         signingConfig signingConfigs.Sadad
-
     }
 
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled true
             shrinkResources false
-            debuggable true
+            debuggable false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             signingConfigs.Sadad
         }
@@ -88,6 +87,7 @@ dependencies {
     implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.5.1'
 
     implementation 'com.squareup.picasso:picasso:2.5.2'
+    implementation 'com.github.developer-newland-ir:UploadLibrary:4.7'
     //implementation 'ru.egslava:blurredview:1.0'
 
     // Glide
