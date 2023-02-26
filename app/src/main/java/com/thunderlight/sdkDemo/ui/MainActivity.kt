@@ -14,7 +14,6 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
-import com.enrique.stackblur.StackBlurManager
 import com.thunderlight.sdkDemo.constant.ConstantsStr
 import com.thunderlight.sdk.R
 import com.thunderlight.sdk.databinding.ActivityMainBinding
@@ -45,7 +44,7 @@ open class MainActivity : AppCompatActivity() {
     private val size = 100
     private val mShadowBounds = RectF()
 
-    private var _stackBlurManager: StackBlurManager? = null
+   // private var _stackBlurManager: StackBlurManager? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -107,7 +106,7 @@ open class MainActivity : AppCompatActivity() {
 
                 val transactionCallBack = object : TransactionCallBack {
                     override fun onReceive(transactionData: TransactionData) {
-                        Log.i(TAG, "transactionCallBack onReceive: $transactionData")
+                        Log.i(TAG, "transactionCallBack onReceive: $transactionData")//call toString() of transactionData
                         val intent = Intent(this@MainActivity, ResultActivity::class.java)
                         intent.putExtra(TRANSACTION_DATA, transactionData)
                         startActivity(intent)
@@ -172,7 +171,7 @@ open class MainActivity : AppCompatActivity() {
                                 //شناسه برای استعلام تراکنش
                                 val trace = "69"
                                 val rrn = "320138312569"
-                                val reserveNumber = "69"
+                                val reserveNumber = "123465798"
 
                                 // TxnInquiryType به صورت enum تعریف شده است، که براساس نیاز میتوانید مقدار آنرا تغییر دهید
                                 val inquiryType = TxnInquiryType.REQUEST_TYPE_INQUIRY_BY_RRN
