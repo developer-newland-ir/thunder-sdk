@@ -1,4 +1,4 @@
-package com.thunderlight.sdkDemo.utils;
+package com.thunderlight.sdk.utils;
 
 /**
  * @author Created by M.Moradikia

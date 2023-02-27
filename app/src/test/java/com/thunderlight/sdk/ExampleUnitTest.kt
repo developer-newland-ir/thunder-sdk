@@ -1,4 +1,4 @@
-package com.thunderlight.sdkDemo
+package com.thunderlight.sdk
 
 import org.junit.Test
 

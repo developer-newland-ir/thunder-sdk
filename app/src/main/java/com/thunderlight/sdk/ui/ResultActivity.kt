@@ -1,11 +1,9 @@
-package com.thunderlight.sdkDemo.ui
+package com.thunderlight.sdk.ui
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import com.thunderlight.sdk.R
-import com.thunderlight.sdk.databinding.ActivityMainBinding
 import com.thunderlight.sdk.databinding.ActivityResultBinding
-import com.thunderlight.sdkDemo.utils.toString2
+import com.thunderlight.sdk.utils.toString2
 import com.thunderlight.thundersmartsdk.constant.ConstantsStr
 import com.thunderlight.thundersmartsdk.data.PosData
 import com.thunderlight.thundersmartsdk.data.TransactionData

@@ -1,11 +1,11 @@
-package com.thunderlight.sdkDemo.ui.service
+package com.thunderlight.sdk.ui.service
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.thunderlight.sdkDemo.constant.ConstantsStr
-import com.thunderlight.sdkDemo.ui.service.model.PaymentServiceItem
+import com.thunderlight.sdk.constant.ConstantsStr
+import com.thunderlight.sdk.ui.service.model.PaymentServiceItem
 import com.thunderlight.sdk.databinding.ItemPaymentServicesBinding
 import com.thunderlight.thundersmartsdk.constant.RequestType
 

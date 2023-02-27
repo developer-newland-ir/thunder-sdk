@@ -1,4 +1,4 @@
-package com.thunderlight.sdkDemo.ui
+package com.thunderlight.sdk.ui
 
 import android.app.Activity
 import android.content.Intent
@@ -16,10 +16,10 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
 import com.thunderlight.sdk.R
 import com.thunderlight.sdk.databinding.ActivityMainBinding
-import com.thunderlight.sdkDemo.constant.ConstantsStr
-import com.thunderlight.sdkDemo.ui.service.PaymentServicesAdapter
-import com.thunderlight.sdkDemo.ui.service.PaymentServicesViewModel
-import com.thunderlight.sdkDemo.ui.service.model.PaymentServiceItem
+import com.thunderlight.sdk.constant.ConstantsStr
+import com.thunderlight.sdk.ui.service.PaymentServicesAdapter
+import com.thunderlight.sdk.ui.service.PaymentServicesViewModel
+import com.thunderlight.sdk.ui.service.model.PaymentServiceItem
 import com.thunderlight.thundersmartsdk.constant.ConstantsStr.POS_DATA
 import com.thunderlight.thundersmartsdk.constant.ConstantsStr.TRANSACTION_DATA
 import com.thunderlight.thundersmartsdk.constant.RequestType

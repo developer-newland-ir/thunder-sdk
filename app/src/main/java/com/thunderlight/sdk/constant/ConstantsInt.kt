@@ -1,4 +1,4 @@
-package com.thunderlight.sdkDemo.constant
+package com.thunderlight.sdk.constant
 
 /**
  * @author Created by M.Moradikia

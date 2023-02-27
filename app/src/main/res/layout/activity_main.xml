@@ -25,13 +25,13 @@
             android:layout_height="match_parent"
             android:layout_margin="32dp" />
 
-        <com.thunderlight.sdkDemo.utils.BlurImageView
+        <com.thunderlight.sdk.utils.BlurImageView
             android:layout_width="300dp"
             android:layout_height="300dp"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <com.thunderlight.sdkDemo.utils.BlurTestView
+        <com.thunderlight.sdk.utils.BlurTestView
             android:layout_width="300dp"
             android:layout_height="300dp"
             app:layout_constraintBottom_toBottomOf="parent"

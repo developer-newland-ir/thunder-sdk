@@ -1,4 +1,4 @@
-package com.thunderlight.sdkDemo.ui.service
+package com.thunderlight.sdk.ui.service
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -7,16 +7,16 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.GridLayoutManager
-import com.thunderlight.sdkDemo.constant.ConstantsStr.ACTION_OPEN
-import com.thunderlight.sdkDemo.constant.ConstantsStr.HASH_PAN
-import com.thunderlight.sdkDemo.constant.ConstantsStr.INPUT_TYPE
-import com.thunderlight.sdkDemo.constant.ConstantsStr.PAN
-import com.thunderlight.sdkDemo.constant.ConstantsStr.TRK2
-import com.thunderlight.sdkDemo.constant.ConstantsStr.TXN_TYPE
-import com.thunderlight.sdkDemo.constant.ConstantsStr.TXN_TYPE_NORMAL_MENU
-import com.thunderlight.sdkDemo.constant.ConstantsStr.TXN_TYPE_REPORT_LAST_TXN_MENU
-import com.thunderlight.sdkDemo.constant.ConstantsStr.TXN_TYPE_REPORT_MENU
-import com.thunderlight.sdkDemo.ui.service.model.PaymentServiceItem
+import com.thunderlight.sdk.constant.ConstantsStr.ACTION_OPEN
+import com.thunderlight.sdk.constant.ConstantsStr.HASH_PAN
+import com.thunderlight.sdk.constant.ConstantsStr.INPUT_TYPE
+import com.thunderlight.sdk.constant.ConstantsStr.PAN
+import com.thunderlight.sdk.constant.ConstantsStr.TRK2
+import com.thunderlight.sdk.constant.ConstantsStr.TXN_TYPE
+import com.thunderlight.sdk.constant.ConstantsStr.TXN_TYPE_NORMAL_MENU
+import com.thunderlight.sdk.constant.ConstantsStr.TXN_TYPE_REPORT_LAST_TXN_MENU
+import com.thunderlight.sdk.constant.ConstantsStr.TXN_TYPE_REPORT_MENU
+import com.thunderlight.sdk.ui.service.model.PaymentServiceItem
 import com.thunderlight.sdk.databinding.FragmentPaymentServicesBinding
 
 

@@ -1,8 +1,8 @@
-package com.thunderlight.sdkDemo.ui.service
+package com.thunderlight.sdk.ui.service
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.thunderlight.sdkDemo.ui.service.model.PaymentServiceItem
+import com.thunderlight.sdk.ui.service.model.PaymentServiceItem
 import com.thunderlight.sdk.R
 import com.thunderlight.thundersmartsdk.constant.RequestType
 

@@ -1,4 +1,4 @@
-package com.thunderlight.sdkDemo.utils
+package com.thunderlight.sdk.utils
 
 import android.os.Bundle
 import android.util.Log

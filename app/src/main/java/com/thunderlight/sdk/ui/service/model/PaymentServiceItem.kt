@@ -1,4 +1,4 @@
-package com.thunderlight.sdkDemo.ui.service.model
+package com.thunderlight.sdk.ui.service.model
 
 import com.thunderlight.thundersmartsdk.constant.RequestType
 
