@@ -1,0 +1,4 @@
+-keep public class com.thunderlight.thundersmartsdk.generalManager.GeneralSDKManager { public *; }
+-keep public class com.thunderlight.thundersmartsdk.generalManager.PosDataCallBack { public *; }
+-keep public class com.thunderlight.thundersmartsdk.generalManager.ResultCallBack { public *; }
+-keep public class com.thunderlight.thundersmartsdk.generalManager.TransactionCallBack { public *; }

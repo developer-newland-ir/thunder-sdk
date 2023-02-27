@@ -31,7 +31,6 @@ import com.thunderlight.thundersmartsdk.constant.ConstantsStr.MERCHANT_NAME
 import com.thunderlight.thundersmartsdk.constant.ConstantsStr.MOBILE_NUMBER
 import com.thunderlight.thundersmartsdk.constant.ConstantsStr.POS_BRAND_NUMBER
 import com.thunderlight.thundersmartsdk.constant.ConstantsStr.POS_CODE
-import com.thunderlight.thundersmartsdk.constant.ConstantsStr.POS_DATA
 import com.thunderlight.thundersmartsdk.constant.ConstantsStr.POS_MODEL
 import com.thunderlight.thundersmartsdk.constant.ConstantsStr.POS_PART_NUMBER
 import com.thunderlight.thundersmartsdk.constant.ConstantsStr.POS_SERIAL
@@ -58,6 +57,9 @@ import com.thunderlight.thundersmartsdk.constant.RequestType
 import com.thunderlight.thundersmartsdk.constant.TxnInquiryType
 import com.thunderlight.thundersmartsdk.data.PosData
 import com.thunderlight.thundersmartsdk.data.TransactionData
+import com.thunderlight.thundersmartsdk.generalManager.PosDataCallBack
+import com.thunderlight.thundersmartsdk.generalManager.ResultCallBack
+import com.thunderlight.thundersmartsdk.generalManager.TransactionCallBack
 import java.io.ByteArrayOutputStream
 
 /**
@@ -65,7 +67,7 @@ import java.io.ByteArrayOutputStream
  * @date  2/14/2023
  * @company Thunder-Light
  */
-class SDKManager {
+internal class SDKManager {
 
     private val TAG = "SDKManager"
 

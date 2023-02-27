@@ -5,7 +5,6 @@ plugins {
 }
 
 android {
-/*
     signingConfigs {
         Sadad {
             storeFile file('F:\\AndroidStudioProjects\\NewlandPosApp\\ThunderLight_Sadad.jks')
@@ -14,7 +13,6 @@ android {
             keyAlias 'ThunderLight_Sadad'
         }
     }
-*/
 
     namespace 'com.thunderlight.thundersmartsdk'
     compileSdk 33
@@ -25,14 +23,17 @@ android {
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles "consumer-rules.pro"
+        signingConfig signingConfigs.Sadad
     }
 
     buildTypes {
-        /*release {
-            minifyEnabled false
+        release {
+            minifyEnabled true
+            debuggable false
+            crunchPngs true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             signingConfigs.Sadad
-        }*/
+        }
         debug {
             minifyEnabled true
             debuggable false
@@ -69,7 +70,7 @@ afterEvaluate {
 
                 groupId = 'com.github.developer-newland-ir'
                 artifactId = 'thunder-sdk'
-                version = '1.0-alpha'
+                version = '1.1-alpha'
             }
         }
     }

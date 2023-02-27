@@ -1,0 +1,44 @@
+[
+  {
+    "level_": 0,
+    "message_": "Start JSON generation. Platform version: 21 min SDK version: x86",
+    "file_": "C:\\Users\\m.moradkia\\AndroidStudioProjects\\NewLandSDK\\StackBlur\\jni\\Android.mk",
+    "tag_": "debug|x86",
+    "diagnosticCode_": 0,
+    "memoizedIsInitialized": 1,
+    "unknownFields": {
+      "fields": {},
+      "fieldsDescending": {}
+    },
+    "memoizedSize": -1,
+    "memoizedHashCode": 452777503
+  },
+  {
+    "level_": 0,
+    "message_": "JSON \u0027C:\\Users\\m.moradkia\\AndroidStudioProjects\\NewLandSDK\\StackBlur\\build\\.cxx\\Debug\\5j5z2mo1\\x86\\android_gradle_build.json\u0027 was up-to-date",
+    "file_": "C:\\Users\\m.moradkia\\AndroidStudioProjects\\NewLandSDK\\StackBlur\\jni\\Android.mk",
+    "tag_": "debug|x86",
+    "diagnosticCode_": 0,
+    "memoizedIsInitialized": 1,
+    "unknownFields": {
+      "fields": {},
+      "fieldsDescending": {}
+    },
+    "memoizedSize": -1,
+    "memoizedHashCode": -1543233052
+  },
+  {
+    "level_": 0,
+    "message_": "JSON generation completed without problems",
+    "file_": "C:\\Users\\m.moradkia\\AndroidStudioProjects\\NewLandSDK\\StackBlur\\jni\\Android.mk",
+    "tag_": "debug|x86",
+    "diagnosticCode_": 0,
+    "memoizedIsInitialized": 1,
+    "unknownFields": {
+      "fields": {},
+      "fieldsDescending": {}
+    },
+    "memoizedSize": -1,
+    "memoizedHashCode": 244666668
+  }
+]

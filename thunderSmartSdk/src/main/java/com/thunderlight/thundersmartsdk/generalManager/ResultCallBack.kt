@@ -1,4 +1,4 @@
-package com.thunderlight.thundersmartsdk.sadad
+package com.thunderlight.thundersmartsdk.generalManager
 
 /**
  * @author Created by M.Moradikia

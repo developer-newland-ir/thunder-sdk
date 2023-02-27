@@ -14,7 +14,6 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
-import com.thunder.mylibrary.StringUtilsManager
 import com.thunderlight.sdk.R
 import com.thunderlight.sdk.databinding.ActivityMainBinding
 import com.thunderlight.sdkDemo.constant.ConstantsStr
@@ -27,10 +26,10 @@ import com.thunderlight.thundersmartsdk.constant.RequestType
 import com.thunderlight.thundersmartsdk.constant.TxnInquiryType
 import com.thunderlight.thundersmartsdk.data.PosData
 import com.thunderlight.thundersmartsdk.data.TransactionData
-import com.thunderlight.thundersmartsdk.sadad.PosDataCallBack
-import com.thunderlight.thundersmartsdk.sadad.ResultCallBack
-import com.thunderlight.thundersmartsdk.sadad.SDKManager
-import com.thunderlight.thundersmartsdk.sadad.TransactionCallBack
+import com.thunderlight.thundersmartsdk.generalManager.GeneralSDKManager
+import com.thunderlight.thundersmartsdk.generalManager.PosDataCallBack
+import com.thunderlight.thundersmartsdk.generalManager.ResultCallBack
+import com.thunderlight.thundersmartsdk.generalManager.TransactionCallBack
 
 
 //https://stackoverflow.com/questions/10407159/how-to-manage-startactivityforresult-on-android
@@ -90,21 +89,20 @@ open class MainActivity : AppCompatActivity() {
         //binding.imageView.setImageBitmap(_stackBlurManager!!.process(50))
         // binding.imageView.setImageBitmap(_stackBlurManager!!.processNatively(50))
         //binding.imageView.setImageBitmap(_stackBlurManager!!.processRenderScript(this,50f))
-
     }
 
     private fun initView() {
-
     }
 
     private fun initRecyclerView(appList: ArrayList<PaymentServiceItem>) {
         binding.apply {
             recyclerView.apply {
                 serviceAdapter.setData(appList)
-
                 layoutManager = GridLayoutManager(context, 2)
                 adapter = serviceAdapter
-                val sdkManager = SDKManager()
+                val sdkManager = GeneralSDKManager()
+                sdkManager.init()
+
 
                 val transactionCallBack = object : TransactionCallBack {
                     override fun onReceive(transactionData: TransactionData) {
@@ -182,7 +180,7 @@ open class MainActivity : AppCompatActivity() {
                             }
 
                             RequestType.REQUEST_TYPE_DO_KEY_CHANGE -> {
-                                sdkManager.doKeyChange(this@MainActivity, resultCallBack)
+                                sdkManager.doConfiguration(this@MainActivity, resultCallBack)
                             }
 
                             RequestType.REQUEST_TYPE_INQUIRY_POS_DATA -> {
