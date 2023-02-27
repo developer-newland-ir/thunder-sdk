@@ -7,7 +7,7 @@ plugins {
 android {
     signingConfigs {
         Sadad {
-            storeFile file('F:\\AndroidStudioProjects\\NewlandPosApp\\ThunderLight_Sadad.jks')
+            storeFile file('..\\app\\ThunderLight_Sadad.jks')
             storePassword 'TLs@dad2022'
             keyPassword 'TLs@dad2022'
             keyAlias 'ThunderLight_Sadad'
@@ -69,7 +69,7 @@ afterEvaluate {
 
                 groupId = 'com.github.developer-newland-ir'
                 artifactId = 'thunder-sdk'
-                version = '1.1-alpha-rev1'
+                version = '1.1-alpha-rev2'
             }
         }
     }
