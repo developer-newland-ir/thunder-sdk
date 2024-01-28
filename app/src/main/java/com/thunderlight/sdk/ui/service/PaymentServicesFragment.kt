@@ -16,8 +16,8 @@ import com.thunderlight.sdk.constant.ConstantsStr.TXN_TYPE
 import com.thunderlight.sdk.constant.ConstantsStr.TXN_TYPE_NORMAL_MENU
 import com.thunderlight.sdk.constant.ConstantsStr.TXN_TYPE_REPORT_LAST_TXN_MENU
 import com.thunderlight.sdk.constant.ConstantsStr.TXN_TYPE_REPORT_MENU
-import com.thunderlight.sdk.ui.service.model.PaymentServiceItem
 import com.thunderlight.sdk.databinding.FragmentPaymentServicesBinding
+import com.thunderlight.sdk.ui.service.model.PaymentServiceItem
 
 
 class PaymentServicesFragment : Fragment() {

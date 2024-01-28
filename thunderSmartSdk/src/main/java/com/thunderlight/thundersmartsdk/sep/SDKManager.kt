@@ -189,10 +189,12 @@ internal class SDKManager {
                 val bundle = it.extras
                 if (bundle != null) {
                     for (key in bundle.keySet()) {
-                        Log.e(TAG, key + " : " +
-                                if (bundle[key] != null) bundle[key]
-                                else
-                                    "NULL")
+                        Log.e(
+                            TAG, key + " : " +
+                                    if (bundle[key] != null) bundle[key]
+                                    else
+                                        "NULL"
+                        )
                     }
                 }
                 if (it.hasExtra(REQUEST_TYPE_3RD_PARTY)) {
