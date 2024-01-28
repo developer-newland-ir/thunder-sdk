@@ -1,7 +1,10 @@
 package com.thunderlight.sdk.utils
 
+import android.app.Activity
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
+import android.view.inputmethod.InputMethodManager
 
 /**
  * @author Created by M.Moradikia
@@ -24,4 +27,21 @@ fun Bundle.toString2(): String {
         e.printStackTrace()
     }
     return x
+}
+
+fun strToDigit(value: String): String {
+    if (value.isNullOrEmpty())
+        return ""
+    return value.replace("[^0-9]".toRegex(), "")
+}
+
+fun hideSoftKeyboard(context: Activity) {
+    try {
+
+        Log.i("TAG", "-------------------------------------- hideSoftKeyboard ")
+        val imm = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager?
+        imm!!.hideSoftInputFromWindow(context.window.decorView.rootView.windowToken, 0)
+    } catch (e: Exception) {
+        e.printStackTrace()
+    }
 }

@@ -8,6 +8,7 @@ package com.thunderlight.thundersmartsdk.constant
 enum class HostApp(val value: String) {
     HOST_SADAD("sadad"),
     HOST_SEPEHR("sepehr"),
+    HOST_SEP("sep"),
     HOST_IRANKISH("irankish"),
     HOST_UNKNOWN("unknown")
 }

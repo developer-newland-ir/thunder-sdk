@@ -1,0 +1,20 @@
+{
+  "version": 3,
+  "artifactType": {
+    "type": "APK",
+    "kind": "Directory"
+  },
+  "applicationId": "com.thunderlight.sdk",
+  "variantName": "release",
+  "elements": [
+    {
+      "type": "SINGLE",
+      "filters": [],
+      "attributes": [],
+      "versionCode": 4,
+      "versionName": "1.1-alpha-rev3",
+      "outputFile": "Smart-Light_SDK_1.1-alpha-rev3_4_20240108_1241.apk"
+    }
+  ],
+  "elementType": "File"
+}

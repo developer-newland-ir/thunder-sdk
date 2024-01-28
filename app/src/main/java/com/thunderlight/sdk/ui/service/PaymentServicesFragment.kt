@@ -22,7 +22,6 @@ import com.thunderlight.sdk.databinding.FragmentPaymentServicesBinding
 
 class PaymentServicesFragment : Fragment() {
 
-    //این layout برای انتخاب نوع گزارش نیز استفاده شده است
     private lateinit var binding: FragmentPaymentServicesBinding
 
     lateinit var serviceAdapter: PaymentServicesAdapter
@@ -60,18 +59,22 @@ class PaymentServicesFragment : Fragment() {
     }
 
     private fun initViewModel() {
-        if (inputType == TXN_TYPE_NORMAL_MENU) {
-            viewModel.menuList.observe(viewLifecycleOwner) {
-                initRecyclerView(it)
+        when (inputType) {
+            TXN_TYPE_NORMAL_MENU -> {
+                viewModel.menuList.observe(viewLifecycleOwner) {
+                    initRecyclerView(it)
+                }
+                viewModel.getMenuItems()
             }
-            viewModel.getMenuItems()
-        } else if (inputType == TXN_TYPE_REPORT_MENU) {
-            viewModel.subMenuList.observe(viewLifecycleOwner) {
-                initRecyclerView(it)
+            TXN_TYPE_REPORT_MENU -> {
+                viewModel.subMenuList.observe(viewLifecycleOwner) {
+                    initRecyclerView(it)
+                }
             }
-        } else if (inputType == TXN_TYPE_REPORT_LAST_TXN_MENU) {
-            viewModel.subMenuList.observe(viewLifecycleOwner) {
-                initRecyclerView(it)
+            TXN_TYPE_REPORT_LAST_TXN_MENU -> {
+                viewModel.subMenuList.observe(viewLifecycleOwner) {
+                    initRecyclerView(it)
+                }
             }
         }
     }

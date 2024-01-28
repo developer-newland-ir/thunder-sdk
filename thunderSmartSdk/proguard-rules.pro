@@ -21,6 +21,8 @@
 #-renamesourcefileattribute SourceFile
 
 
+#https://www.guardsquare.com/manual/configuration/examples#native
+
 -keep public class com.thunderlight.thundersmartsdk.generalManager.GeneralSDKManager { public *; }
 -keep public class com.thunderlight.thundersmartsdk.generalManager.PosDataCallBack { public *; }
 -keep public class com.thunderlight.thundersmartsdk.generalManager.ResultCallBack { public *; }

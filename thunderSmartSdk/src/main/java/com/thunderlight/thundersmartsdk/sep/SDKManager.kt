@@ -1,4 +1,4 @@
-package com.thunderlight.thundersmartsdk.sadad
+package com.thunderlight.thundersmartsdk.sep
 
 import android.app.Activity
 import android.content.BroadcastReceiver
@@ -36,8 +36,10 @@ import com.thunderlight.thundersmartsdk.constant.ConstantsStr.POS_PART_NUMBER
 import com.thunderlight.thundersmartsdk.constant.ConstantsStr.POS_SERIAL
 import com.thunderlight.thundersmartsdk.constant.ConstantsStr.RECEIVE_STATE
 import com.thunderlight.thundersmartsdk.constant.ConstantsStr.RECEIVE_STATE_CANCEL
+import com.thunderlight.thundersmartsdk.constant.ConstantsStr.RECEIVE_STATE_END_PROCESS
 import com.thunderlight.thundersmartsdk.constant.ConstantsStr.RECEIVE_STATE_ERROR
 import com.thunderlight.thundersmartsdk.constant.ConstantsStr.RECEIVE_STATE_SUCCESS
+import com.thunderlight.thundersmartsdk.constant.ConstantsStr.RECEIVE_STATE_TIMEOUT
 import com.thunderlight.thundersmartsdk.constant.ConstantsStr.REQUEST_TYPE_3RD_PARTY
 import com.thunderlight.thundersmartsdk.constant.ConstantsStr.RESERVE_NUMBER
 import com.thunderlight.thundersmartsdk.constant.ConstantsStr.RESPONSE_CODE
@@ -86,7 +88,7 @@ internal class SDKManager {
         bitmap?.compress(Bitmap.CompressFormat.WEBP, 100, bs)
 
         Log.i(TAG, "printBitmap Size: ${bs.size()}")
-        i.component = ComponentName(ConstantsStr.PNS, ConstantsStr.PNS + ConstantsStr.TH)
+        i.component = ComponentName(ConstantsStr.PNSEP, ConstantsStr.PNSEP + ConstantsStr.TH)
         i.putExtra(REQUEST_TYPE_3RD_PARTY, RequestType.REQUEST_TYPE_PRINT_BITMAP.value)
         i.putExtra(ConstantsStr.BITMAP, bs.toByteArray())
 
@@ -97,7 +99,7 @@ internal class SDKManager {
     fun inquiryBalance(context: Activity, transactionCallBack: TransactionCallBack) {
         SDKManager.transactionCallBack = transactionCallBack
         val i = Intent(ca)
-        i.component = ComponentName(ConstantsStr.PNS, ConstantsStr.PNS + ConstantsStr.TH)
+        i.component = ComponentName(ConstantsStr.PNSEP, ConstantsStr.PNSEP + ConstantsStr.TH)
         i.putExtra(REQUEST_TYPE_3RD_PARTY, RequestType.REQUEST_TYPE_BALANCE.value)
         context.startActivity(i)
     }
@@ -109,7 +111,7 @@ internal class SDKManager {
             transactionCallBack.onError("-5000", context.applicationContext.getString(R.string.invalid_amount))
         else {
             val i = Intent(ca)
-            i.component = ComponentName(ConstantsStr.PNS, ConstantsStr.PNS + ConstantsStr.TH)
+            i.component = ComponentName(ConstantsStr.PNSEP, ConstantsStr.PNSEP + ConstantsStr.TH)
             i.putExtra(REQUEST_TYPE_3RD_PARTY, RequestType.REQUEST_TYPE_SALE.value)
             i.putExtra(AMOUNT, amount)
             i.putExtra(ConstantsStr.EXT_RESERVE_NUMBER, reserveNumber)
@@ -122,7 +124,7 @@ internal class SDKManager {
     fun doServiceTransaction(context: Activity, requestType: RequestType, approveByThird: Boolean, transactionCallBack: TransactionCallBack) {
         SDKManager.transactionCallBack = transactionCallBack
         val i = Intent(ca)
-        i.component = ComponentName(ConstantsStr.PNS, ConstantsStr.PNS + ConstantsStr.TH)
+        i.component = ComponentName(ConstantsStr.PNSEP, ConstantsStr.PNSEP + ConstantsStr.TH)
         i.putExtra(REQUEST_TYPE_3RD_PARTY, requestType.value)
         i.putExtra(ConstantsStr.APPROVE_BY_THIRD, approveByThird)
         context.startActivity(i)
@@ -132,7 +134,7 @@ internal class SDKManager {
     fun inquiryTransactionData(context: Activity, inquiryType: TxnInquiryType, inquiryId: String, printReceipt: Boolean, transactionCallBack: TransactionCallBack) {
         SDKManager.transactionCallBack = transactionCallBack
         val i = Intent(ca)
-        i.component = ComponentName(ConstantsStr.PNS, ConstantsStr.PNS + ConstantsStr.TH)
+        i.component = ComponentName(ConstantsStr.PNSEP, ConstantsStr.PNSEP + ConstantsStr.TH)
         i.putExtra(REQUEST_TYPE_3RD_PARTY, RequestType.REQUEST_TYPE_INQUIRY_TRANSACTION.value)
         i.putExtra(ConstantsStr.TXN_INQUIRY_TYPE, inquiryType.value)
         i.putExtra(ConstantsStr.EXT_RESERVE_NUMBER, inquiryId)
@@ -144,7 +146,7 @@ internal class SDKManager {
     fun inquiryPosData(context: Activity, posDataCallBack: PosDataCallBack) {
         SDKManager.posDataCallBack = posDataCallBack
         val i = Intent(ca)
-        i.component = ComponentName(ConstantsStr.PNS, ConstantsStr.PNS + ConstantsStr.TH)
+        i.component = ComponentName(ConstantsStr.PNSEP, ConstantsStr.PNSEP + ConstantsStr.TH)
         i.putExtra(REQUEST_TYPE_3RD_PARTY, RequestType.REQUEST_TYPE_INQUIRY_POS_DATA.value)
         context.startActivity(i)
     }
@@ -153,7 +155,7 @@ internal class SDKManager {
     fun doKeyChange(context: Activity, resultCallBack: ResultCallBack) {
         SDKManager.resultCallBack = resultCallBack
         val i = Intent(ca)
-        i.component = ComponentName(ConstantsStr.PNS, ConstantsStr.PNS + ConstantsStr.TH)
+        i.component = ComponentName(ConstantsStr.PNSEP, ConstantsStr.PNSEP + ConstantsStr.TH)
         i.putExtra(REQUEST_TYPE_3RD_PARTY, RequestType.REQUEST_TYPE_DO_KEY_CHANGE.value)
         context.startActivity(i)
     }
@@ -163,7 +165,7 @@ internal class SDKManager {
         SDKManager.resultCallBack = resultCallBack
         val i = Intent(ca)
         i.putExtra(TRACE, trace)
-        i.component = ComponentName(ConstantsStr.PNS, ConstantsStr.PNS + ConstantsStr.TH)
+        i.component = ComponentName(ConstantsStr.PNSEP, ConstantsStr.PNSEP + ConstantsStr.TH)
         i.putExtra(REQUEST_TYPE_3RD_PARTY, RequestType.REQUEST_TYPE_DO_REVERSE.value)
         context.startActivity(i)
     }
@@ -173,7 +175,7 @@ internal class SDKManager {
         SDKManager.resultCallBack = resultCallBack
         val i = Intent(ca)
         i.putExtra(RRN, rrn)
-        i.component = ComponentName(ConstantsStr.PNS, ConstantsStr.PNS + ConstantsStr.TH)
+        i.component = ComponentName(ConstantsStr.PNSEP, ConstantsStr.PNSEP + ConstantsStr.TH)
         i.putExtra(REQUEST_TYPE_3RD_PARTY, RequestType.REQUEST_TYPE_DO_APPROVE.value)
         context.startActivity(i)
     }
@@ -187,13 +189,16 @@ internal class SDKManager {
                 val bundle = it.extras
                 if (bundle != null) {
                     for (key in bundle.keySet()) {
-                        Log.e(TAG, key + " : " + if (bundle[key] != null) bundle[key] else "NULL")
+                        Log.e(TAG, key + " : " +
+                                if (bundle[key] != null) bundle[key]
+                                else
+                                    "NULL")
                     }
                 }
                 if (it.hasExtra(REQUEST_TYPE_3RD_PARTY)) {
                     val requestType = it.getStringExtra(REQUEST_TYPE_3RD_PARTY) ?: ""
 
-                    if (it.action.equals("com.thunderlight.sadad.SEND_TXN_DATA")) {
+                    if (it.action.equals("com.thunderlight.sep.SEND_TXN_DATA")) {
                         when (requestType) {
                             RequestType.REQUEST_TYPE_INQUIRY_POS_DATA.value -> {
                                 handlePosData(it)
@@ -211,6 +216,12 @@ internal class SDKManager {
                             RequestType.REQUEST_TYPE_DO_KEY_CHANGE.value -> {
                                 handleResult(it)
                             }
+                            RequestType.REQUEST_TYPE_DO_APPROVE.value -> {
+                                handleResult(it)
+                            }
+                            RequestType.REQUEST_TYPE_DO_REVERSE.value -> {
+                                handleResult(it)
+                            }
                             else -> {}
                         }
                     }
@@ -221,79 +232,79 @@ internal class SDKManager {
         //https://www.baeldung.com/kotlin/data-class-to-map
         //https://stackoverflow.com/questions/49860916/how-to-convert-a-kotlin-data-class-object-to-map
         private fun handleTxnData(intent: Intent, requestType: String) {
-            Log.i(TAG, "handle Txn Data : ")
+            Log.i(TAG, "handle Txn Data --> ${intent.getStringExtra(RECEIVE_STATE) ?: ""}")
             when (intent.getStringExtra(RECEIVE_STATE) ?: "") {
                 RECEIVE_STATE_SUCCESS -> {
                     val transactionData = TransactionData()
                     intent.extras?.let {
                         if (intent.hasExtra(TXN_TYPE)) {
-                            transactionData.txnType = it.getString(TXN_TYPE)!!
+                            transactionData.txnType = it.getString(TXN_TYPE) ?: ""
                             if (it.containsKey(RESPONSE_CODE))
-                                transactionData.responseCode = it.getString(RESPONSE_CODE)!!
+                                transactionData.responseCode = it.getString(RESPONSE_CODE) ?: ""
 
                             if (it.containsKey(RESPONSE_MESSAGE))
-                                transactionData.responseMessage = it.getString(RESPONSE_MESSAGE)!!
+                                transactionData.responseMessage = it.getString(RESPONSE_MESSAGE) ?: ""
 
                             if (it.containsKey(AMOUNT))
-                                transactionData.amount = it.getString(AMOUNT)!!
+                                transactionData.amount = it.getString(AMOUNT) ?: ""
 
                             if (it.containsKey(AFFECTIVE_AMOUNT))
-                                transactionData.affectiveAmount = it.getString(AFFECTIVE_AMOUNT)!!
+                                transactionData.affectiveAmount = it.getString(AFFECTIVE_AMOUNT) ?: ""
 
                             if (it.containsKey(TIME_STAMP))
                                 transactionData.timeStamp = it.getLong(TIME_STAMP)
 
                             if (it.containsKey(SOLAR_DATE))
-                                transactionData.timeFarsi = it.getString(SOLAR_DATE)!!
+                                transactionData.timeFarsi = it.getString(SOLAR_DATE) ?: ""
 
                             if (it.containsKey(DATE))
-                                transactionData.date = it.getString(DATE)!!
+                                transactionData.date = it.getString(DATE) ?: ""
 
                             if (it.containsKey(TIME))
-                                transactionData.time = it.getString(TIME)!!
+                                transactionData.time = it.getString(TIME) ?: ""
 
                             if (it.containsKey(TRACE))
-                                transactionData.trace = it.getString(TRACE)!!
+                                transactionData.trace = it.getString(TRACE) ?: ""
 
                             if (it.containsKey(RRN))
-                                transactionData.rrn = it.getString(RRN)!!
+                                transactionData.rrn = it.getString(RRN) ?: ""
 
                             if (it.containsKey(RESERVE_NUMBER))
-                                transactionData.reserveNumber = it.getString(RESERVE_NUMBER)!!
+                                transactionData.reserveNumber = it.getString(RESERVE_NUMBER) ?: ""
 
                             if (it.containsKey(TRUNCATE_PAN))
-                                transactionData.truncatePan = it.getString(TRUNCATE_PAN)!!
+                                transactionData.truncatePan = it.getString(TRUNCATE_PAN) ?: ""
 
                             if (it.containsKey(BANK))
-                                transactionData.bank = it.getString(BANK)!!
+                                transactionData.bank = it.getString(BANK) ?: ""
 
                             if (it.containsKey(HASH_PAN))
-                                transactionData.hashPan = it.getString(HASH_PAN)!!
+                                transactionData.hashPan = it.getString(HASH_PAN) ?: ""
 
                             if (it.containsKey(SHIFT_NO))
                                 transactionData.shiftNo = it.getInt(SHIFT_NO)
 
                             if (it.containsKey(TERMINAL_ID))
-                                transactionData.terminalId = it.getString(TERMINAL_ID)!!
+                                transactionData.terminalId = it.getString(TERMINAL_ID) ?: ""
 
                             if (it.containsKey(MERCHANT_ID))
-                                transactionData.merchantId = it.getString(MERCHANT_ID)!!
+                                transactionData.merchantId = it.getString(MERCHANT_ID) ?: ""
 
                             if (it.containsKey(MERCHANT_NAME))
-                                transactionData.merchantName = it.getString(MERCHANT_NAME)!!
+                                transactionData.merchantName = it.getString(MERCHANT_NAME) ?: ""
 
                             if (it.containsKey(POS_SERIAL))
-                                transactionData.posSerial = it.getString(POS_SERIAL)!!
+                                transactionData.posSerial = it.getString(POS_SERIAL) ?: ""
 
                             if (requestType == RequestType.REQUEST_TYPE_CHARGE_PIN.value) {
                                 var extraData = Bundle()
 
                                 if (it.containsKey(EXTRA_DATA)) {
-                                    extraData = it.getBundle(EXTRA_DATA)!!
-                                    val voucherPin = extraData.getString(CHARGE_PIN_VOUCHER)!!
-                                    val voucherSerial = extraData.getString(CHARGE_PIN_SERIAL)!!
-                                    val txnType = extraData.getString(CHARGE_TYPE)!!
-                                    val operatorCode = extraData.getString(CHARGE_OPERATOR_CODE)!!
+                                    extraData = it.getBundle(EXTRA_DATA) ?: Bundle()
+                                    val voucherPin = extraData.getString(CHARGE_PIN_VOUCHER) ?: ""
+                                    val voucherSerial = extraData.getString(CHARGE_PIN_SERIAL) ?: ""
+                                    val txnType = extraData.getString(CHARGE_TYPE) ?: ""
+                                    val operatorCode = extraData.getString(CHARGE_OPERATOR_CODE) ?: ""
 
                                     extraData.putString(CHARGE_PIN_VOUCHER, voucherPin)
                                     extraData.putString(CHARGE_PIN_SERIAL, voucherSerial)
@@ -307,10 +318,10 @@ internal class SDKManager {
                                 var extraData = Bundle()
 
                                 if (it.containsKey(EXTRA_DATA)) {
-                                    extraData = it.getBundle(EXTRA_DATA)!!
-                                    val mobileNumber = extraData.getString(MOBILE_NUMBER)!!
-                                    val chargeType = extraData.getString(CHARGE_TYPE)!!
-                                    val operatorCode = extraData.getString(CHARGE_OPERATOR_CODE)!!
+                                    extraData = it.getBundle(EXTRA_DATA) ?: Bundle()
+                                    val mobileNumber = extraData.getString(MOBILE_NUMBER) ?: ""
+                                    val chargeType = extraData.getString(CHARGE_TYPE) ?: ""
+                                    val operatorCode = extraData.getString(CHARGE_OPERATOR_CODE) ?: ""
 
                                     extraData.putString(MOBILE_NUMBER, mobileNumber)
                                     extraData.putString(CHARGE_TYPE, chargeType)
@@ -324,11 +335,11 @@ internal class SDKManager {
                                 var extraData = Bundle()
 
                                 if (it.containsKey(EXTRA_DATA)) {
-                                    extraData = it.getBundle(EXTRA_DATA)!!
+                                    extraData = it.getBundle(EXTRA_DATA) ?: Bundle()
                                 }
 
-                                val billId = extraData.getString(BILL_ID)!!
-                                val billPaymentId = extraData.getString(BILL_PAYMENT_ID)!!
+                                val billId = extraData.getString(BILL_ID) ?: ""
+                                val billPaymentId = extraData.getString(BILL_PAYMENT_ID) ?: ""
 
                                 extraData.putString(BILL_ID, billId)
                                 extraData.putString(BILL_PAYMENT_ID, billPaymentId)
@@ -344,10 +355,14 @@ internal class SDKManager {
                     val errorMessage = intent.getStringExtra(ERROR_MESSAGE) ?: ""
                     transactionCallBack?.onError(errorCode, errorMessage)
                 }
-                RECEIVE_STATE_CANCEL -> {
+                RECEIVE_STATE_CANCEL,
+                RECEIVE_STATE_TIMEOUT,
+                RECEIVE_STATE_END_PROCESS -> {
                     transactionCallBack?.onCanceled()
                 }
-                else -> {}
+                else -> {
+                    transactionCallBack?.onCanceled()
+                }
             }
         }
 
@@ -360,51 +375,51 @@ internal class SDKManager {
                         if (intent.hasExtra(TIME_STAMP))
                             posData.timeStamp = it.getLong(TIME_STAMP)
                         if (it.containsKey(DATE))
-                            posData.date = it.getString(DATE)!!
+                            posData.date = it.getString(DATE) ?: ""
 
                         if (it.containsKey(TIME))
-                            posData.time = it.getString(TIME)!!
+                            posData.time = it.getString(TIME) ?: ""
 
                         if (it.containsKey(TERMINAL_ID))
-                            posData.terminalId = it.getString(TERMINAL_ID)!!
+                            posData.terminalId = it.getString(TERMINAL_ID) ?: ""
 
                         if (it.containsKey(MERCHANT_ID))
-                            posData.merchantId = it.getString(MERCHANT_ID)!!
+                            posData.merchantId = it.getString(MERCHANT_ID) ?: ""
 
                         if (it.containsKey(MERCHANT_NAME))
-                            posData.merchantName = it.getString(MERCHANT_NAME)!!
+                            posData.merchantName = it.getString(MERCHANT_NAME) ?: ""
 
                         if (it.containsKey(POS_SERIAL))
-                            posData.posSerial = it.getString(POS_SERIAL)!!
+                            posData.posSerial = it.getString(POS_SERIAL) ?: ""
 
 
                         if (it.containsKey(POS_PART_NUMBER))
-                            posData.posPartNumber = it.getString(POS_PART_NUMBER)!!
+                            posData.posPartNumber = it.getString(POS_PART_NUMBER) ?: ""
 
 
                         if (it.containsKey(POS_BRAND_NUMBER))
-                            posData.posBrandName = it.getString(POS_BRAND_NUMBER)!!
+                            posData.posBrandName = it.getString(POS_BRAND_NUMBER) ?: ""
 
                         if (it.containsKey(POS_MODEL))
-                            posData.posModel = it.getString(POS_MODEL)!!
+                            posData.posModel = it.getString(POS_MODEL) ?: ""
 
                         if (it.containsKey(POS_CODE))
-                            posData.posCode = it.getString(POS_CODE)!!
+                            posData.posCode = it.getString(POS_CODE) ?: ""
 
                         if (it.containsKey(APP_VERSION))
-                            posData.appVersion = it.getString(APP_VERSION)!!
+                            posData.appVersion = it.getString(APP_VERSION) ?: ""
 
                         if (it.containsKey(SDK_VERSION))
-                            posData.sdkVersion = it.getString(SDK_VERSION)!!
+                            posData.sdkVersion = it.getString(SDK_VERSION) ?: ""
 
                         if (it.containsKey(TELEPHONE))
-                            posData.telNo = it.getString(TELEPHONE)!!
+                            posData.telNo = it.getString(TELEPHONE) ?: ""
 
                         if (it.containsKey(MOBILE_NUMBER))
-                            posData.mobileNo = it.getString(MOBILE_NUMBER)!!
+                            posData.mobileNo = it.getString(MOBILE_NUMBER) ?: ""
 
                         if (it.containsKey(ADDRESS_FA))
-                            posData.addressFa = it.getString(ADDRESS_FA)!!
+                            posData.addressFa = it.getString(ADDRESS_FA) ?: ""
 
                         if (it.containsKey(EXTRA_DATA))
                             posData.extraData = null
@@ -422,7 +437,7 @@ internal class SDKManager {
         }
 
         private fun handleResult(intent: Intent) {
-            Log.i(TAG, "key Change Response: ")
+            Log.i(TAG, "handleResult Response: $intent")
             when (intent.getStringExtra(RECEIVE_STATE) ?: "") {
                 RECEIVE_STATE_SUCCESS -> {
                     resultCallBack?.onSuccess()

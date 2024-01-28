@@ -10,6 +10,9 @@
     -->
 
     <uses-permission android:name="com.thunderlight.sadad.permission.THUNDER_LIGHT" />
+    <uses-permission android:name="com.thunderlight.sepehr.permission.THUNDER_LIGHT" />
+    <uses-permission android:name="com.thunderlight.sep.permission.THUNDER_LIGHT" />
+    <uses-permission android:name="com.thunderlight.ikcc.permission.THUNDER_LIGHT" />
 
 
     <application tools:targetApi="31">
@@ -20,6 +23,36 @@
             android:permission="com.thunderlight.sadad.permission.THUNDER_LIGHT">
             <intent-filter>
                 <action android:name="com.thunderlight.sadad.SEND_TXN_DATA" />
+            </intent-filter>
+        </receiver>
+
+        <receiver
+            android:name=".sep.SDKManager$SdkBroadcastReceiver"
+            android:enabled="true"
+            android:exported="true"
+            android:permission="com.thunderlight.sep.permission.THUNDER_LIGHT">
+            <intent-filter>
+                <action android:name="com.thunderlight.sep.SEND_TXN_DATA" />
+            </intent-filter>
+        </receiver>
+
+        <receiver
+            android:name=".sepehr.SDKManager$SdkBroadcastReceiver"
+            android:enabled="true"
+            android:exported="true"
+            android:permission="com.thunderlight.sepehr.permission.THUNDER_LIGHT">
+            <intent-filter>
+                <action android:name="com.thunderlight.sepehr.SEND_TXN_DATA" />
+            </intent-filter>
+        </receiver>
+
+        <receiver
+            android:name=".irankish.SDKManager$SdkBroadcastReceiver"
+            android:enabled="true"
+            android:exported="true"
+            android:permission="com.thunderlight.ikcc.permission.THUNDER_LIGHT">
+            <intent-filter>
+                <action android:name="com.thunderlight.ikcc.SEND_TXN_DATA" />
             </intent-filter>
         </receiver>
 

@@ -9,3 +9,6 @@
 -keep public class com.thunderlight.thundersmartsdk.constant.HostApp { public *; }
 -keep public class com.thunderlight.thundersmartsdk.constant.RequestType { public *; }
 -keep public class com.thunderlight.thundersmartsdk.constant.TxnInquiryType { public *; }
+
+
+#https://www.guardsquare.com/manual/configuration/examples#native

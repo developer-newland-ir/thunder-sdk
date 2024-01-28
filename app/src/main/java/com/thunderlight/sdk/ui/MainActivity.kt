@@ -1,5 +1,6 @@
 package com.thunderlight.sdk.ui
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
 import android.graphics.*
@@ -8,18 +9,23 @@ import android.renderscript.Allocation
 import android.renderscript.Element
 import android.renderscript.RenderScript
 import android.renderscript.ScriptIntrinsicBlur
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
+import android.view.KeyEvent
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
 import com.thunderlight.sdk.R
-import com.thunderlight.sdk.databinding.ActivityMainBinding
 import com.thunderlight.sdk.constant.ConstantsStr
+import com.thunderlight.sdk.databinding.ActivityMainBinding
 import com.thunderlight.sdk.ui.service.PaymentServicesAdapter
 import com.thunderlight.sdk.ui.service.PaymentServicesViewModel
 import com.thunderlight.sdk.ui.service.model.PaymentServiceItem
+import com.thunderlight.sdk.utils.hideSoftKeyboard
+import com.thunderlight.sdk.utils.strToDigit
 import com.thunderlight.thundersmartsdk.constant.ConstantsStr.POS_DATA
 import com.thunderlight.thundersmartsdk.constant.ConstantsStr.TRANSACTION_DATA
 import com.thunderlight.thundersmartsdk.constant.RequestType
@@ -30,7 +36,6 @@ import com.thunderlight.thundersmartsdk.generalManager.GeneralSDKManager
 import com.thunderlight.thundersmartsdk.generalManager.PosDataCallBack
 import com.thunderlight.thundersmartsdk.generalManager.ResultCallBack
 import com.thunderlight.thundersmartsdk.generalManager.TransactionCallBack
-
 
 //https://stackoverflow.com/questions/10407159/how-to-manage-startactivityforresult-on-android
 //https://developer.android.com/training/basics/intents/result#kotlin
@@ -44,15 +49,28 @@ open class MainActivity : AppCompatActivity() {
     private val size = 100
     private val mShadowBounds = RectF()
 
+    lateinit var transactionCallBack: TransactionCallBack
+    lateinit var sdkManager: GeneralSDKManager
     // private var _stackBlurManager: StackBlurManager? = null
+
+
+    private var isScanningComplete = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        initTransactionCallBack()
+        initSdk()
         initViewModel()
         initView()
+    }
+
+    private fun initSdk() {
+        sdkManager = GeneralSDKManager()
+        val host = sdkManager.init(this@MainActivity)
+        binding.topLogo.tvHostName.text = " Host App: Smart " + host.value.substring(0, 1).uppercase() + host.value.substring(1)
     }
 
     private fun initViewModel() {
@@ -63,8 +81,7 @@ open class MainActivity : AppCompatActivity() {
 
         val largeIcon: Bitmap = BitmapFactory.decodeResource(resources, R.drawable.free)
         /* val blurDrawable = BlurDrawable(binding.imageView, 50)
-         binding.imageView.setBackgroundDrawable(blurDrawable);
- */
+         binding.imageView.setBackgroundDrawable(blurDrawable);*/
         //binding.imageView.setImageBitmap(blurBitmap(largeIcon))
 
         var paint = Paint()
@@ -92,37 +109,81 @@ open class MainActivity : AppCompatActivity() {
     }
 
     private fun initView() {
+        // Attention: width of bitmap must be 384 px
+        val options = BitmapFactory.Options()
+        options.inScaled = false
+        //var bitmap = BitmapFactory.decodeResource(resources, R.drawable.image_1)
+        //val bitmap = BlurImage.blur(this, binding.imageView.rootView, R.drawable.image_1)
+        //bitmap = BlurImage.blurBitmap2(this, bitmap)
+        //binding.imageView.setImageBitmap(bitmap)
+        binding.etAmount.requestFocus()
+
+        binding.etAmount.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+            }
+
+            override fun afterTextChanged(s: Editable?) {
+                // بررسی شماره موبایل
+                var amount = s.toString()
+                if (!isScanningComplete &&
+                    amount.isNotEmpty() &&
+                    (amount.contains("\n") ||
+                            amount.contains("\r") ||
+                            amount.contains("\t") ||
+                            amount.contains("\t"))
+                ) {
+                    isScanningComplete = true
+                    amount = strToDigit(amount)
+                    Log.i(TAG, "afterTextChanged3 amount: $amount")
+                    binding.etAmount.text?.clear()
+                    binding.etAmount.setText("")
+                    sdkManager.doSaleTransaction(this@MainActivity, amount, amount, false, transactionCallBack)
+                }
+            }
+        })
+        hideSoftKeyboard(this@MainActivity)
     }
 
+    private fun initTransactionCallBack() {
+        transactionCallBack = object : TransactionCallBack {
+            override fun onReceive(transactionData: TransactionData) {
+                isScanningComplete = false
+                Log.i(TAG, "transactionCallBack onReceive: $transactionData") // toString() of transactionData
+                val intent = Intent(this@MainActivity, ResultActivity::class.java)
+                intent.putExtra(TRANSACTION_DATA, transactionData)
+                startActivity(intent)
+            }
+
+            override fun onError(errorCode: String, errorMsg: String) {
+                isScanningComplete = false
+                Log.i(TAG, "transactionCallBack onError: $errorCode :  $errorMsg ")
+                Toast.makeText(this@MainActivity, "error: $errorCode : $errorMsg ", Toast.LENGTH_LONG).show()
+            }
+
+            override fun onCanceled() {
+                isScanningComplete = false
+                Log.i(TAG, "transactionCallBack onCanceled: ")
+                Toast.makeText(this@MainActivity, "Transaction Canceled", Toast.LENGTH_LONG).show()
+            }
+        }
+    }
+
+    @SuppressLint("SetTextI18n")
     private fun initRecyclerView(appList: ArrayList<PaymentServiceItem>) {
         binding.apply {
             recyclerView.apply {
                 serviceAdapter.setData(appList)
                 layoutManager = GridLayoutManager(context, 2)
                 adapter = serviceAdapter
-                val sdkManager = GeneralSDKManager()
-                sdkManager.init()
 
 
-                val transactionCallBack = object : TransactionCallBack {
-                    override fun onReceive(transactionData: TransactionData) {
-                        Log.i(TAG, "transactionCallBack onReceive: $transactionData")//call toString() of transactionData
-                        val intent = Intent(this@MainActivity, ResultActivity::class.java)
-                        intent.putExtra(TRANSACTION_DATA, transactionData)
-                        startActivity(intent)
-                    }
+                // Transaction Call Back
 
-                    override fun onError(errorCode: String, errorMsg: String) {
-                        Log.i(TAG, "transactionCallBack onError: $errorCode :  $errorMsg ")
-                        Toast.makeText(this@MainActivity, "error: $errorCode : $errorMsg ", Toast.LENGTH_LONG).show()
-                    }
 
-                    override fun onCanceled() {
-                        Log.i(TAG, "transactionCallBack onCanceled: ")
-                        Toast.makeText(this@MainActivity, "Canceled", Toast.LENGTH_LONG).show()
-                    }
-                }
-
+                // Pos Data Call Back
                 val posDataCallBack = object : PosDataCallBack {
                     override fun onReceive(posData: PosData) {
                         Log.i(TAG, "posDataCallBack onReceive: $posData")
@@ -137,14 +198,15 @@ open class MainActivity : AppCompatActivity() {
                     }
                 }
 
+                // Result Call Back
                 val resultCallBack = object : ResultCallBack {
                     override fun onSuccess() {
-                        Log.i(TAG, "keyChangeCallBack onSuccess ")
+                        Log.i(TAG, "CallBack onSuccess ")
                         Toast.makeText(this@MainActivity, "--------- Result Success ---------", Toast.LENGTH_LONG).show()
                     }
 
                     override fun onError(errorCode: String, errorMsg: String) {
-                        Log.i(TAG, "keyChangeCallBack onError: $errorCode :  $errorMsg ")
+                        Log.i(TAG, "CallBack onError: $errorCode :  $errorMsg ")
                         Toast.makeText(this@MainActivity, "error: $errorCode : $errorMsg ", Toast.LENGTH_LONG).show()
                     }
                 }
@@ -156,10 +218,19 @@ open class MainActivity : AppCompatActivity() {
                                 sdkManager.inquiryBalance(this@MainActivity, transactionCallBack)
                             }
                             RequestType.REQUEST_TYPE_SALE -> {
-                                val amount = "10000"
+                                val amount = "1230000"
                                 val reserveNumber = "0123456879"//شناسه پرداخت
                                 sdkManager.doSaleTransaction(this@MainActivity, amount, reserveNumber, false, transactionCallBack)
                             }
+                            RequestType.REQUEST_TYPE_DO_APPROVE -> {
+                                val rrn = "002164224589"
+                                sdkManager.doApprove220(this@MainActivity, rrn, resultCallBack)
+                            }
+                            RequestType.REQUEST_TYPE_DO_REVERSE -> {
+                                val trace = "000220"
+                                sdkManager.doReverse420(this@MainActivity, trace, resultCallBack)
+                            }
+
                             RequestType.REQUEST_TYPE_BILL -> {
                                 sdkManager.doServiceTransaction(this@MainActivity, RequestType.REQUEST_TYPE_BILL, false, transactionCallBack)
                             }
@@ -167,16 +238,17 @@ open class MainActivity : AppCompatActivity() {
                                 sdkManager.doServiceTransaction(this@MainActivity, RequestType.REQUEST_TYPE_CHARGE, false, transactionCallBack)
                             }
                             RequestType.REQUEST_TYPE_INQUIRY_TRANSACTION -> {
-
                                 //شناسه برای استعلام تراکنش
                                 val trace = "69"
-                                val rrn = "320138312569"
+                                val rrn = "123721175465"
                                 val reserveNumber = "123465798"
 
                                 // TxnInquiryType به صورت enum تعریف شده است، که براساس نیاز میتوانید مقدار آنرا تغییر دهید
                                 val inquiryType = TxnInquiryType.REQUEST_TYPE_INQUIRY_BY_RRN
 
-                                sdkManager.inquiryTransactionData(this@MainActivity, inquiryType, rrn, true, transactionCallBack)
+                                sdkManager.inquiryTransactionData(this@MainActivity, inquiryType, rrn, true, transactionCallBack) // 1
+                                //sdkManager.inquiryTransactionData(this@MainActivity, inquiryType, trace, true, transactionCallBack) // 2
+                                //sdkManager.inquiryTransactionData(this@MainActivity, inquiryType, reserveNumber, true, transactionCallBack) // 3
                             }
 
                             RequestType.REQUEST_TYPE_DO_KEY_CHANGE -> {
@@ -262,5 +334,30 @@ open class MainActivity : AppCompatActivity() {
         //After finishing everything, we destroy the Renderscript.
         rs.destroy()
         return outBitmap
+    }
+
+    override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
+        Log.i(TAG, "onKeyDown: $keyCode")
+        if (keyCode == KeyEvent.KEYCODE_ENTER) {
+            // Barcode scan is complete
+            Log.i(TAG, "onKeyDown: KEYCODE_ENTER")
+            isScanningComplete = true
+            handleBarcodeScan()
+            return true // Consume the event
+        }
+        return super.onKeyDown(keyCode, event)
+    }
+
+    private fun handleBarcodeScan() {
+        if (isScanningComplete) {
+            // Perform actions on scanning completion
+            // For example, display the scanned barcode
+            var amount = binding.etAmount.text.toString()
+            amount = strToDigit(amount)
+            Log.i(TAG, "handleBarcodeScan: $amount")
+            Toast.makeText(this, "Scanned barcode: ", Toast.LENGTH_SHORT).show()
+
+            //sdkManager.doSaleTransaction(this@MainActivity, amount, amount, true, transactionCallBack)
+        }
     }
 }

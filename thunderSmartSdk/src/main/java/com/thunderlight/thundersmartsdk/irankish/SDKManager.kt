@@ -1,4 +1,4 @@
-package com.thunderlight.thundersmartsdk.sadad
+package com.thunderlight.thundersmartsdk.irankish
 
 import android.app.Activity
 import android.content.BroadcastReceiver
@@ -86,7 +86,7 @@ internal class SDKManager {
         bitmap?.compress(Bitmap.CompressFormat.WEBP, 100, bs)
 
         Log.i(TAG, "printBitmap Size: ${bs.size()}")
-        i.component = ComponentName(ConstantsStr.PNS, ConstantsStr.PNS + ConstantsStr.TH)
+        i.component = ComponentName(ConstantsStr.PNIKCC, ConstantsStr.PNIKCC + ConstantsStr.TH)
         i.putExtra(REQUEST_TYPE_3RD_PARTY, RequestType.REQUEST_TYPE_PRINT_BITMAP.value)
         i.putExtra(ConstantsStr.BITMAP, bs.toByteArray())
 
@@ -97,7 +97,7 @@ internal class SDKManager {
     fun inquiryBalance(context: Activity, transactionCallBack: TransactionCallBack) {
         SDKManager.transactionCallBack = transactionCallBack
         val i = Intent(ca)
-        i.component = ComponentName(ConstantsStr.PNS, ConstantsStr.PNS + ConstantsStr.TH)
+        i.component = ComponentName(ConstantsStr.PNIKCC, ConstantsStr.PNIKCC + ConstantsStr.TH)
         i.putExtra(REQUEST_TYPE_3RD_PARTY, RequestType.REQUEST_TYPE_BALANCE.value)
         context.startActivity(i)
     }
@@ -109,7 +109,7 @@ internal class SDKManager {
             transactionCallBack.onError("-5000", context.applicationContext.getString(R.string.invalid_amount))
         else {
             val i = Intent(ca)
-            i.component = ComponentName(ConstantsStr.PNS, ConstantsStr.PNS + ConstantsStr.TH)
+            i.component = ComponentName(ConstantsStr.PNIKCC, ConstantsStr.PNIKCC + ConstantsStr.TH)
             i.putExtra(REQUEST_TYPE_3RD_PARTY, RequestType.REQUEST_TYPE_SALE.value)
             i.putExtra(AMOUNT, amount)
             i.putExtra(ConstantsStr.EXT_RESERVE_NUMBER, reserveNumber)
@@ -122,7 +122,7 @@ internal class SDKManager {
     fun doServiceTransaction(context: Activity, requestType: RequestType, approveByThird: Boolean, transactionCallBack: TransactionCallBack) {
         SDKManager.transactionCallBack = transactionCallBack
         val i = Intent(ca)
-        i.component = ComponentName(ConstantsStr.PNS, ConstantsStr.PNS + ConstantsStr.TH)
+        i.component = ComponentName(ConstantsStr.PNIKCC, ConstantsStr.PNIKCC + ConstantsStr.TH)
         i.putExtra(REQUEST_TYPE_3RD_PARTY, requestType.value)
         i.putExtra(ConstantsStr.APPROVE_BY_THIRD, approveByThird)
         context.startActivity(i)
@@ -132,7 +132,7 @@ internal class SDKManager {
     fun inquiryTransactionData(context: Activity, inquiryType: TxnInquiryType, inquiryId: String, printReceipt: Boolean, transactionCallBack: TransactionCallBack) {
         SDKManager.transactionCallBack = transactionCallBack
         val i = Intent(ca)
-        i.component = ComponentName(ConstantsStr.PNS, ConstantsStr.PNS + ConstantsStr.TH)
+        i.component = ComponentName(ConstantsStr.PNIKCC, ConstantsStr.PNIKCC + ConstantsStr.TH)
         i.putExtra(REQUEST_TYPE_3RD_PARTY, RequestType.REQUEST_TYPE_INQUIRY_TRANSACTION.value)
         i.putExtra(ConstantsStr.TXN_INQUIRY_TYPE, inquiryType.value)
         i.putExtra(ConstantsStr.EXT_RESERVE_NUMBER, inquiryId)
@@ -144,7 +144,7 @@ internal class SDKManager {
     fun inquiryPosData(context: Activity, posDataCallBack: PosDataCallBack) {
         SDKManager.posDataCallBack = posDataCallBack
         val i = Intent(ca)
-        i.component = ComponentName(ConstantsStr.PNS, ConstantsStr.PNS + ConstantsStr.TH)
+        i.component = ComponentName(ConstantsStr.PNIKCC, ConstantsStr.PNIKCC + ConstantsStr.TH)
         i.putExtra(REQUEST_TYPE_3RD_PARTY, RequestType.REQUEST_TYPE_INQUIRY_POS_DATA.value)
         context.startActivity(i)
     }
@@ -153,28 +153,8 @@ internal class SDKManager {
     fun doKeyChange(context: Activity, resultCallBack: ResultCallBack) {
         SDKManager.resultCallBack = resultCallBack
         val i = Intent(ca)
-        i.component = ComponentName(ConstantsStr.PNS, ConstantsStr.PNS + ConstantsStr.TH)
+        i.component = ComponentName(ConstantsStr.PNIKCC, ConstantsStr.PNIKCC + ConstantsStr.TH)
         i.putExtra(REQUEST_TYPE_3RD_PARTY, RequestType.REQUEST_TYPE_DO_KEY_CHANGE.value)
-        context.startActivity(i)
-    }
-
-    // 420
-    fun doReverse(context: Activity, trace: String, resultCallBack: ResultCallBack) {
-        SDKManager.resultCallBack = resultCallBack
-        val i = Intent(ca)
-        i.putExtra(TRACE, trace)
-        i.component = ComponentName(ConstantsStr.PNS, ConstantsStr.PNS + ConstantsStr.TH)
-        i.putExtra(REQUEST_TYPE_3RD_PARTY, RequestType.REQUEST_TYPE_DO_REVERSE.value)
-        context.startActivity(i)
-    }
-
-    // 220
-    fun doApprove(context: Activity, rrn: String, resultCallBack: ResultCallBack) {
-        SDKManager.resultCallBack = resultCallBack
-        val i = Intent(ca)
-        i.putExtra(RRN, rrn)
-        i.component = ComponentName(ConstantsStr.PNS, ConstantsStr.PNS + ConstantsStr.TH)
-        i.putExtra(REQUEST_TYPE_3RD_PARTY, RequestType.REQUEST_TYPE_DO_APPROVE.value)
         context.startActivity(i)
     }
 
@@ -193,7 +173,7 @@ internal class SDKManager {
                 if (it.hasExtra(REQUEST_TYPE_3RD_PARTY)) {
                     val requestType = it.getStringExtra(REQUEST_TYPE_3RD_PARTY) ?: ""
 
-                    if (it.action.equals("com.thunderlight.sadad.SEND_TXN_DATA")) {
+                    if (it.action.equals("com.thunderlight.ikcc.SEND_TXN_DATA")) {
                         when (requestType) {
                             RequestType.REQUEST_TYPE_INQUIRY_POS_DATA.value -> {
                                 handlePosData(it)
