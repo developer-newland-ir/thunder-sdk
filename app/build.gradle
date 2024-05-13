@@ -20,8 +20,8 @@ android {
         applicationId "com.thunderlight.sdk"
         minSdk 21
         targetSdk 34
-        versionCode 4
-        versionName "1.1-alpha-rev3"
+        versionCode 5
+        versionName "1.1-alpha-rev4"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         signingConfig signingConfigs.Sadad
@@ -29,9 +29,13 @@ android {
 
     buildTypes {
         release {
+            /*minifyEnabled true
+            shrinkResources true
+            debuggable false*/
+
             minifyEnabled false
             shrinkResources false
-            debuggable false
+            debuggable true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             signingConfigs.Sadad
         }

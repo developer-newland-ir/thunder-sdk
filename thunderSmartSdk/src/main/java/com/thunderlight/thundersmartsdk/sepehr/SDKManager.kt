@@ -317,7 +317,10 @@ internal class SDKManager {
                             }//intent.extras?.getBundle(EXTRA_DATA)
                         }
                     }
-                    transactionCallBack?.onReceive(transactionData)
+                    if (intent.getStringExtra(ERROR_CODE) == "-202") // تراکنش تعیین وضعیت نشده
+                        transactionCallBack?.onUndeterminedStateOfPreviousTxn(transactionData)
+                    else
+                        transactionCallBack?.onSuccess(transactionData)
                 }
                 RECEIVE_STATE_ERROR -> {
                     val errorCode = intent.getStringExtra(ERROR_CODE) ?: ""

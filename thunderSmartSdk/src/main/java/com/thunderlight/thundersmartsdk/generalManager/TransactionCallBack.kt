@@ -9,7 +9,8 @@ import com.thunderlight.thundersmartsdk.data.TransactionData
  */
 
 interface TransactionCallBack {
-    fun onReceive(transactionData: TransactionData)
+    fun onSuccess(transactionData: TransactionData)
+    fun onUndeterminedStateOfPreviousTxn(transactionData: TransactionData)
     fun onError(errorCode: String, errorMsg: String)
     fun onCanceled()
 }

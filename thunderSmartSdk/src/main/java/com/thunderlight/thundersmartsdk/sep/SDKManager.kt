@@ -238,7 +238,8 @@ internal class SDKManager {
             when (intent.getStringExtra(RECEIVE_STATE) ?: "") {
                 RECEIVE_STATE_SUCCESS -> {
                     val transactionData = TransactionData()
-                    intent.extras?.let {
+
+                    intent.extras?.let {// it = intent
                         if (intent.hasExtra(TXN_TYPE)) {
                             transactionData.txnType = it.getString(TXN_TYPE) ?: ""
                             if (it.containsKey(RESPONSE_CODE))
@@ -347,10 +348,13 @@ internal class SDKManager {
                                 extraData.putString(BILL_PAYMENT_ID, billPaymentId)
                                 transactionData.extraData = extraData
 
-                            }//intent.extras?.getBundle(EXTRA_DATA)
+                            } //intent.extras?.getBundle(EXTRA_DATA)
                         }
                     }
-                    transactionCallBack?.onReceive(transactionData)
+                    if (intent.getStringExtra(ERROR_CODE) == "-202") // تراکنش تعیین وضعیت نشده
+                        transactionCallBack?.onUndeterminedStateOfPreviousTxn(transactionData)
+                    else
+                        transactionCallBack?.onSuccess(transactionData)
                 }
                 RECEIVE_STATE_ERROR -> {
                     val errorCode = intent.getStringExtra(ERROR_CODE) ?: ""

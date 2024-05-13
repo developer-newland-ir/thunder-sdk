@@ -116,7 +116,7 @@ open class MainActivity : AppCompatActivity() {
         //val bitmap = BlurImage.blur(this, binding.imageView.rootView, R.drawable.image_1)
         //bitmap = BlurImage.blurBitmap2(this, bitmap)
         //binding.imageView.setImageBitmap(bitmap)
-        binding.etAmount.requestFocus()
+        // binding.etAmount.requestFocus()
 
         binding.etAmount.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
@@ -149,13 +149,35 @@ open class MainActivity : AppCompatActivity() {
 
     private fun initTransactionCallBack() {
         transactionCallBack = object : TransactionCallBack {
-            override fun onReceive(transactionData: TransactionData) {
+            override fun onSuccess(transactionData: TransactionData) {
                 isScanningComplete = false
                 Log.i(TAG, "transactionCallBack onReceive: $transactionData") // toString() of transactionData
                 val intent = Intent(this@MainActivity, ResultActivity::class.java)
                 intent.putExtra(TRANSACTION_DATA, transactionData)
                 startActivity(intent)
             }
+
+            override fun onUndeterminedStateOfPreviousTxn(transactionData: TransactionData) {
+                // در صورت فراخوانی این متد، 3RD party  اجازه شروع تراکنش جدید را ندارد، تا زمانی که تراکنش را تعیین وضعیت کند
+                val theProductWasPresented = true
+
+                val resultCallBack = object : ResultCallBack {
+                    override fun onSuccess() {
+                        Log.i(TAG, "onSuccess: ")
+                    }
+
+                    override fun onError(errorCode: String, errorMsg: String) {
+                        Log.i(TAG, "onError: ")
+                    }
+                }
+
+                if (theProductWasPresented) //اگر 3RD party موفق به ارائه محصول شده است جهت نهایی سازی ارسال تاییدیه میکند
+                    sdkManager.doApprove220(this@MainActivity, transactionData.rrn, resultCallBack)
+                else   //اگر 3RD party موفق به ارائه محصول نشد جهت نهایی سازی ارسال اصلاحیه میکند
+
+                    sdkManager.doReverse420(this@MainActivity, transactionData.trace, resultCallBack)
+            }
+
 
             override fun onError(errorCode: String, errorMsg: String) {
                 isScanningComplete = false
@@ -217,38 +239,94 @@ open class MainActivity : AppCompatActivity() {
                             RequestType.REQUEST_TYPE_BALANCE -> {
                                 sdkManager.inquiryBalance(this@MainActivity, transactionCallBack)
                             }
+
                             RequestType.REQUEST_TYPE_SALE -> {
-                                val amount = "1230000"
                                 val reserveNumber = "0123456879"//شناسه پرداخت
-                                sdkManager.doSaleTransaction(this@MainActivity, amount, reserveNumber, false, transactionCallBack)
+
+                                val listener = object : InputDialogDataCallBack {
+                                    override fun getData(amount: String) {
+                                        sdkManager.doSaleTransaction(this@MainActivity, amount, reserveNumber, false, transactionCallBack)
+                                    }
+
+                                    override fun onCancel() {}
+                                }
+
+                                val dialog = InputDialogFragment()
+                                val extraData = Bundle()
+                                extraData.putSerializable("listener", listener)
+                                extraData.putString("hint", "مبلغ")
+                                dialog.arguments = extraData
+                                dialog.show(supportFragmentManager, "InputDialogFragment")
                             }
+
                             RequestType.REQUEST_TYPE_DO_APPROVE -> {
-                                val rrn = "002164224589"
-                                sdkManager.doApprove220(this@MainActivity, rrn, resultCallBack)
+                                val listener = object : InputDialogDataCallBack {
+                                    override fun getData(rrn: String) {
+                                        sdkManager.doApprove220(this@MainActivity, rrn, resultCallBack)
+                                    }
+
+                                    override fun onCancel() {}
+                                }
+
+                                val dialog = InputDialogFragment()
+                                val extraData = Bundle()
+                                extraData.putSerializable("listener", listener)
+                                extraData.putString("hint", "شماره مرجع")
+                                dialog.arguments = extraData
+                                dialog.show(supportFragmentManager, "InputDialogFragment")
                             }
+
                             RequestType.REQUEST_TYPE_DO_REVERSE -> {
-                                val trace = "000220"
-                                sdkManager.doReverse420(this@MainActivity, trace, resultCallBack)
+                                val listener = object : InputDialogDataCallBack {
+                                    override fun getData(trace: String) {
+                                        sdkManager.doReverse420(this@MainActivity, trace, resultCallBack)
+                                    }
+
+                                    override fun onCancel() {}
+                                }
+
+                                val dialog = InputDialogFragment()
+                                val extraData = Bundle()
+                                extraData.putSerializable("listener", listener)
+                                extraData.putString("hint", "شماره پیگیری")
+                                dialog.arguments = extraData
+                                dialog.show(supportFragmentManager, "InputDialogFragment")
                             }
 
                             RequestType.REQUEST_TYPE_BILL -> {
                                 sdkManager.doServiceTransaction(this@MainActivity, RequestType.REQUEST_TYPE_BILL, false, transactionCallBack)
                             }
+
                             RequestType.REQUEST_TYPE_CHARGE_PIN -> {
                                 sdkManager.doServiceTransaction(this@MainActivity, RequestType.REQUEST_TYPE_CHARGE, false, transactionCallBack)
                             }
+
                             RequestType.REQUEST_TYPE_INQUIRY_TRANSACTION -> {
                                 //شناسه برای استعلام تراکنش
                                 val trace = "69"
                                 val rrn = "123721175465"
                                 val reserveNumber = "123465798"
 
-                                // TxnInquiryType به صورت enum تعریف شده است، که براساس نیاز میتوانید مقدار آنرا تغییر دهید
-                                val inquiryType = TxnInquiryType.REQUEST_TYPE_INQUIRY_BY_RRN
 
-                                sdkManager.inquiryTransactionData(this@MainActivity, inquiryType, rrn, true, transactionCallBack) // 1
-                                //sdkManager.inquiryTransactionData(this@MainActivity, inquiryType, trace, true, transactionCallBack) // 2
-                                //sdkManager.inquiryTransactionData(this@MainActivity, inquiryType, reserveNumber, true, transactionCallBack) // 3
+                                val listener = object : InputDialogDataCallBack {
+                                    override fun getData(rrn: String) {
+                                        // TxnInquiryType به صورت enum تعریف شده است، که براساس نیاز میتوانید مقدار آنرا تغییر دهید
+                                        val inquiryType = TxnInquiryType.REQUEST_TYPE_INQUIRY_BY_RRN
+
+                                        sdkManager.inquiryTransactionData(this@MainActivity, inquiryType, rrn, true, transactionCallBack) // 1
+                                        //sdkManager.inquiryTransactionData(this@MainActivity, inquiryType, trace, true, transactionCallBack) // 2
+                                        //sdkManager.inquiryTransactionData(this@MainActivity, inquiryType, reserveNumber, true, transactionCallBack) // 3
+                                    }
+
+                                    override fun onCancel() {}
+                                }
+
+                                val dialog = InputDialogFragment()
+                                val extraData = Bundle()
+                                extraData.putSerializable("listener", listener)
+                                extraData.putString("hint", "شماره مرجع")
+                                dialog.arguments = extraData
+                                dialog.show(supportFragmentManager, "InputDialogFragment")
                             }
 
                             RequestType.REQUEST_TYPE_DO_KEY_CHANGE -> {
