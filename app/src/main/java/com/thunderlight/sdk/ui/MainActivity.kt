@@ -157,9 +157,14 @@ open class MainActivity : AppCompatActivity() {
                 startActivity(intent)
             }
 
-            override fun onUndeterminedStateOfPreviousTxn(transactionData: TransactionData) {
+            override fun onUndeterminedStateOfPreviousTxn(txn: TransactionData) {
                 // در صورت فراخوانی این متد، 3RD party  اجازه شروع تراکنش جدید را ندارد، تا زمانی که تراکنش را تعیین وضعیت کند
                 val theProductWasPresented = true
+
+                Log.i(
+                    TAG,
+                    "onUndeterminedStateOfPreviousTxn: traceNo: ${txn.trace},rrn: ${txn.rrn}, respCode: ${txn.responseCode}"
+                )
 
                 val resultCallBack = object : ResultCallBack {
                     override fun onSuccess() {
@@ -172,12 +177,11 @@ open class MainActivity : AppCompatActivity() {
                 }
 
                 if (theProductWasPresented) //اگر 3RD party موفق به ارائه محصول شده است جهت نهایی سازی ارسال تاییدیه میکند
-                    sdkManager.doApprove220(this@MainActivity, transactionData.rrn, resultCallBack)
+                    ;//   sdkManager.doApprove220(this@MainActivity, transactionData.rrn, resultCallBack)
                 else   //اگر 3RD party موفق به ارائه محصول نشد جهت نهایی سازی ارسال اصلاحیه میکند
+                ;//   sdkManager.doReverse420(this@MainActivity, transactionData.trace, resultCallBack)
 
-                    sdkManager.doReverse420(this@MainActivity, transactionData.trace, resultCallBack)
             }
-
 
             override fun onError(errorCode: String, errorMsg: String) {
                 isScanningComplete = false
@@ -344,6 +348,7 @@ open class MainActivity : AppCompatActivity() {
                                 val bitmap = BitmapFactory.decodeResource(context.resources, R.drawable.img_384, options)
                                 sdkManager.printBitmap(this@MainActivity, bitmap, resultCallBack)
                             }
+
                             else -> {
                             }
                         }
