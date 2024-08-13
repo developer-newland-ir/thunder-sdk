@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.os.Parcel
 import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
-import java.io.Serializable
 
 /**
  * @author Created by M.Moradikia
@@ -66,11 +65,11 @@ data class TransactionData(
     @SerializedName("merchantId")
     var merchantId: String = "",
 
-    @SerializedName("merchantName")
-    var merchantName: String = "",
+    /*    @SerializedName("merchantName")
+        var merchantName: String = "",
 
-    @SerializedName("posSerial")
-    var posSerial: String = "",
+        @SerializedName("posSerial")
+        var posSerial: String = "",*/
 
     @SerializedName("extraData")
     var extraData: Bundle? = null
@@ -110,9 +109,9 @@ data class TransactionData(
         parcel.readString().toString(),
         parcel.readInt(),
         parcel.readString().toString(),
+        parcel.readString().toString(),/*
         parcel.readString().toString(),
-        parcel.readString().toString(),
-        parcel.readString().toString(),
+        parcel.readString().toString(),*/
         parcel.readBundle(Bundle::class.java.classLoader)
     ) {
     }
@@ -135,9 +134,9 @@ data class TransactionData(
         parcel.writeString(hashPan)
         parcel.writeInt(shiftNo)
         parcel.writeString(terminalId)
-        parcel.writeString(merchantId)
+        parcel.writeString(merchantId)/*
         parcel.writeString(merchantName)
-        parcel.writeString(posSerial)
+        parcel.writeString(posSerial)*/
         parcel.writeBundle(extraData)
     }
 

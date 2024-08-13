@@ -71,7 +71,7 @@ import java.io.ByteArrayOutputStream
  */
 internal class SDKManager {
 
-    private val TAG = "SDKManager"
+    private val TAG = "SepSDKManager"
 
     companion object {
         private var transactionCallBack: TransactionCallBack? = null
@@ -190,8 +190,9 @@ internal class SDKManager {
                 if (bundle != null) {
                     for (key in bundle.keySet()) {
                         Log.e(
-                            TAG, key + " : " +
-                                    if (bundle[key] != null) bundle[key]
+                            TAG, "$key : " +
+                                    if (bundle[key] != null)
+                                        bundle[key]
                                     else
                                         "NULL"
                         )
@@ -293,12 +294,12 @@ internal class SDKManager {
                             if (it.containsKey(MERCHANT_ID))
                                 transactionData.merchantId = it.getString(MERCHANT_ID) ?: ""
 
-                            if (it.containsKey(MERCHANT_NAME))
+                            /*if (it.containsKey(MERCHANT_NAME))
                                 transactionData.merchantName = it.getString(MERCHANT_NAME) ?: ""
 
                             if (it.containsKey(POS_SERIAL))
                                 transactionData.posSerial = it.getString(POS_SERIAL) ?: ""
-
+*/
                             if (requestType == RequestType.REQUEST_TYPE_CHARGE_PIN.value) {
                                 var extraData = Bundle()
 

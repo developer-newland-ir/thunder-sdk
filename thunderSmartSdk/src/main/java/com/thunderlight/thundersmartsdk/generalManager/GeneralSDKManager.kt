@@ -34,9 +34,10 @@ class GeneralSDKManager {
     fun init(context: Context): HostApp {
         val packages: List<PackageInfo> = context.packageManager.getInstalledPackages(0)
         val allowedApplication = ArrayList<String>()
+
+        allowedApplication.add(ConstantsStr.PNSEP)
         allowedApplication.add(ConstantsStr.PNS)
         allowedApplication.add(ConstantsStr.PNSEPEHR)
-        allowedApplication.add(ConstantsStr.PNSEP)
         allowedApplication.add(ConstantsStr.PNIKCC)
 
         var x = HostApp.HOST_UNKNOWN.value
@@ -45,7 +46,7 @@ class GeneralSDKManager {
             val packageInfo = packages[i]
             var foundIt = false
             for (appPackageName in allowedApplication)
-                if (packageInfo.applicationInfo.packageName == appPackageName) {
+                if (packageInfo.applicationInfo?.packageName == appPackageName) {
                     x = appPackageName
                     foundIt = true
                     break
@@ -53,16 +54,19 @@ class GeneralSDKManager {
             if (foundIt)
                 break
         }
-
-        if (x.contains(HostApp.HOST_SADAD.value))
-            host = HostApp.HOST_SADAD
+        if (x.contains(HostApp.HOST_SEP.value))
+            host = HostApp.HOST_SEP
         else if (x.contains(HostApp.HOST_SEPEHR.value))
             host = HostApp.HOST_SEPEHR
         else if (x.contains(HostApp.HOST_IRANKISH.value))
             host = HostApp.HOST_IRANKISH
-        else if (x.contains(HostApp.HOST_SEP.value))
-            host = HostApp.HOST_SEP
-        host = HostApp.HOST_SEP
+        else if (x.contains(HostApp.HOST_SADAD.value))
+            host = HostApp.HOST_SADAD
+        else
+            host = HostApp.HOST_UNKNOWN
+
+        //todo test, Comment this
+        //host = HostApp.HOST_SEP
 
         saveLogs(context)
 
@@ -312,7 +316,7 @@ class GeneralSDKManager {
         }
     }
 
-    //انجام تراکنش تبادل کلید
+    //انجام تراکنش پیکربندی
     fun doConfiguration(context: Activity, resultCallBack: ResultCallBack) {
         when (host) {
             HostApp.HOST_SADAD -> {

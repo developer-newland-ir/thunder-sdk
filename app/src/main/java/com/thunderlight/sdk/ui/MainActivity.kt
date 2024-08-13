@@ -3,7 +3,11 @@ package com.thunderlight.sdk.ui
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
-import android.graphics.*
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.graphics.BlurMaskFilter
+import android.graphics.Paint
+import android.graphics.RectF
 import android.os.Bundle
 import android.renderscript.Allocation
 import android.renderscript.Element
@@ -70,12 +74,13 @@ open class MainActivity : AppCompatActivity() {
     private fun initSdk() {
         sdkManager = GeneralSDKManager()
         val host = sdkManager.init(this@MainActivity)
-        binding.topLogo.tvHostName.text = " Host App: Smart " + host.value.substring(0, 1).uppercase() + host.value.substring(1)
+        binding.topLogo.tvHostName.text = " Host App: Smart ${host.value.substring(0, 1).uppercase() + host.value.substring(1)}"
     }
 
     private fun initViewModel() {
         viewModel.menuList.observe(this@MainActivity) {
-            initRecyclerView(it)
+            if (it.size > 0)
+                initRecyclerView(it)
         }
         viewModel.getMenuItems()
 
@@ -157,13 +162,13 @@ open class MainActivity : AppCompatActivity() {
                 startActivity(intent)
             }
 
-            override fun onUndeterminedStateOfPreviousTxn(txn: TransactionData) {
+            override fun onUndeterminedStateOfPreviousTxn(transactionData: TransactionData) {
                 // در صورت فراخوانی این متد، 3RD party  اجازه شروع تراکنش جدید را ندارد، تا زمانی که تراکنش را تعیین وضعیت کند
                 val theProductWasPresented = true
 
                 Log.i(
                     TAG,
-                    "onUndeterminedStateOfPreviousTxn: traceNo: ${txn.trace},rrn: ${txn.rrn}, respCode: ${txn.responseCode}"
+                    "onUndeterminedStateOfPreviousTxn: traceNo: ${transactionData.trace},rrn: ${transactionData.rrn}, respCode: ${transactionData.responseCode}"
                 )
 
                 val resultCallBack = object : ResultCallBack {
@@ -181,6 +186,10 @@ open class MainActivity : AppCompatActivity() {
                 else   //اگر 3RD party موفق به ارائه محصول نشد جهت نهایی سازی ارسال اصلاحیه میکند
                 ;//   sdkManager.doReverse420(this@MainActivity, transactionData.trace, resultCallBack)
 
+                Log.i(TAG, "transactionCallBack onReceive: $transactionData") // toString() of transactionData
+                val intent = Intent(this@MainActivity, ResultActivity::class.java)
+                intent.putExtra(TRANSACTION_DATA, transactionData)
+                startActivity(intent)
             }
 
             override fun onError(errorCode: String, errorMsg: String) {
@@ -315,7 +324,7 @@ open class MainActivity : AppCompatActivity() {
                                 val listener = object : InputDialogDataCallBack {
                                     override fun getData(rrn: String) {
                                         // TxnInquiryType به صورت enum تعریف شده است، که براساس نیاز میتوانید مقدار آنرا تغییر دهید
-                                        val inquiryType = TxnInquiryType.REQUEST_TYPE_INQUIRY_BY_RRN
+                                        val inquiryType = TxnInquiryType.REQUEST_TYPE_INQUIRY_BY_TRACE
 
                                         sdkManager.inquiryTransactionData(this@MainActivity, inquiryType, rrn, true, transactionCallBack) // 1
                                         //sdkManager.inquiryTransactionData(this@MainActivity, inquiryType, trace, true, transactionCallBack) // 2
